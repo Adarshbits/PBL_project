@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Digital Twin | Adarsh A Singh</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8fafc;
+}
+.section-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+</style>
+</head>
+
+<body class="p-8">
+
+<!-- HEADER -->
+<header class="mb-12 text-center">
+<h1 class="text-4xl font-bold">AI Digital Twin (AI Human Clone)</h1>
+<p class="text-gray-600 mt-2">PBL-2 | Department of Computer Science & Engineering</p>
+<p class="text-gray-600">Manipal University Jaipur | 2026</p>
+</header>
+
+<!-- STUDENT DETAILS -->
+<section class="section-card mb-8">
+<h2 class="text-2xl font-semibold mb-4">Student Details</h2>
+<ul class="text-gray-700 space-y-2">
+<li><strong>Name:</strong> Adarsh A Singh</li>
+<li><strong>Registration Number:</strong> 2427030325</li>
+<li><strong>Semester:</strong> 4th Semester (PBL-2)</li>
+<li><strong>Guide:</strong> Mr. Virendra Mehgal</li>
+<li><strong>Project Type:</strong> Software Based (AI Application)</li>
+</ul>
+</section>
+
+<!-- PROJECT OVERVIEW -->
+<section class="section-card mb-8">
+<h2 class="text-2xl font-semibold mb-4">Project Overview</h2>
+<p class="text-gray-700 leading-relaxed">
+The AI Digital Twin is a personalized artificial intelligence system that mimics the personality, communication style, and technical behavior of the developer. 
+It integrates a local Large Language Model (LLM) using Ollama, a Python backend, memory storage via JSON, 
+voice output using pyttsx3, and a Gradio-based user interface.
+</p>
+</section>
+
+<!-- SYSTEM FEATURES -->
+<section class="section-card mb-8">
+<h2 class="text-2xl font-semibold mb-4">Core Features</h2>
+<ul class="list-disc pl-6 text-gray-700 space-y-2">
+<li>Personality Injection using structured prompt engineering</li>
+<li>Local LLM execution using Ollama (llama3.2:1b)</li>
+<li>Conversation memory storage using JSON</li>
+<li>Voice response using pyttsx3 (Text-to-Speech)</li>
+<li>Gradio Chat Interface (Local UI)</li>
+<li>Python 3.14 Compatible</li>
+</ul>
+</section>
+
+<!-- TECH STACK -->
+<section class="section-card mb-8">
+<h2 class="text-2xl font-semibold mb-4">Technology Stack</h2>
+<ul class="text-gray-700 space-y-2">
+<li><strong>Backend:</strong> Python</li>
+<li><strong>LLM Engine:</strong> Ollama (llama3.2:1b)</li>
+<li><strong>UI Framework:</strong> Gradio</li>
+<li><strong>Voice Engine:</strong> pyttsx3</li>
+<li><strong>Memory Storage:</strong> JSON File</li>
+<li><strong>Frontend Hosting Page:</strong> GitHub Pages</li>
+</ul>
+</section>
+
+<!-- SYSTEM ARCHITECTURE -->
+<section class="section-card mb-8">
+<h2 class="text-2xl font-semibold mb-4">System Architecture</h2>
+<p class="text-gray-700 leading-relaxed">
+User Input → Gradio Interface → Python Backend → Personality Context Injection → Ollama LLM → 
+Response Generation → JSON Memory Update → Voice Output → UI Display
+</p>
+</section>
+
+<!-- MEMORY EXPLANATION -->
+<section class="section-card mb-8">
+<h2 class="text-2xl font-semibold mb-4">Memory Implementation</h2>
+<p class="text-gray-700 leading-relaxed">
+The system stores previous user conversations inside a local JSON file (chat_history.json). 
+Before generating a response, the system loads recent chat history and injects it into the LLM prompt. 
+This enables short-term contextual memory and improves response consistency.
+</p>
+</section>
+
+<!-- PERSONALITY MODELING -->
+<section class="section-card mb-8">
+<h2 class="text-2xl font-semibold mb-4">Personality Modeling</h2>
+<p class="text-gray-700 leading-relaxed">
+The digital twin personality is defined using structured statements about communication style, 
+technical approach, and academic identity. These personality traits are appended to the prompt 
+before each LLM call to ensure the responses remain consistent and aligned with the developer.
+</p>
+</section>
+
+<!-- VOICE SYSTEM -->
+<section class="section-card mb-8">
+<h2 class="text-2xl font-semibold mb-4">Voice Output System</h2>
+<p class="text-gray-700 leading-relaxed">
+The system uses pyttsx3 for offline text-to-speech synthesis. 
+After generating a response from the LLM, the system converts the text reply into voice 
+and plays it locally, enabling an interactive AI clone experience.
+</p>
+</section>
+
+<!-- LOCAL EXECUTION NOTICE -->
+<section class="section-card mb-8">
+<h2 class="text-2xl font-semibold mb-4">Deployment Model</h2>
+<p class="text-gray-700 leading-relaxed">
+This AI Digital Twin runs locally using Ollama. 
+The LLM inference is performed on the developer's system and is not deployed to cloud infrastructure. 
+This ensures privacy, low cost, and offline functionality.
+</p>
+</section>
+
+<!-- SCREENSHOT PLACEHOLDER -->
+<section class="section-card mb-8">
+<h2 class="text-2xl font-semibold mb-4">Project Screenshots</h2>
+<img src="image.png" alt="">
+</section>
+
+<!-- GITHUB -->
+<section class="section-card text-center">
+<h2 class="text-2xl font-semibold mb-4">Project Repository</h2>
+<a href="https://github.com/Adarshbits/PBL_project" 
+   class="bg-black text-white px-6 py-3 rounded-lg font-semibold">
+   View GitHub Repository
+</a>
+</section>
+
+<footer class="mt-12 text-center text-gray-400 text-sm">
+Department of Computer Science & Engineering • Manipal University Jaipur • 2026
+</footer>
+
+</body>
+</html>
