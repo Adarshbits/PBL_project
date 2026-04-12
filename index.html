@@ -13,7 +13,6 @@ body {
     overflow: hidden;
 }
 
-/* Slides */
 .slide {
     display: none;
     height: 100vh;
@@ -59,7 +58,7 @@ ul {
     font-size: 20px;
 }
 
-/* Image styling */
+/* Image */
 img {
     border-radius: 12px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.6);
@@ -90,8 +89,7 @@ button {
 
 <body>
 
-<!-- SLIDES -->
-
+<!-- Slide 1 -->
 <div class="slide active">
 <h1>AI Human Clone</h1>
 <p>Adarsh Singh</p>
@@ -99,36 +97,48 @@ button {
 <p>Guide: Dr. Virendra Meghwal</p>
 </div>
 
+<!-- Slide 2 -->
 <div class="slide">
 <h2>Introduction</h2>
 <ul>
-<li>AI evolving into digital twins</li>
-<li>Mimics personality & behavior</li>
-<li>Uses Ollama for local AI</li>
+<li>Artificial Intelligence is evolving from basic chatbots to personalized systems</li>
+<li>A digital twin is a virtual representation of a real human</li>
+<li>This project mimics personality, behavior, and communication style</li>
+<li>Uses Ollama for running a local LLM model</li>
+<li>Ensures privacy, fast response, and offline capability</li>
 </ul>
 </div>
 
+<!-- Slide 3 -->
 <div class="slide">
 <h2>Problem</h2>
 <ul>
-<li>Generic chatbots</li>
-<li>No personality</li>
-<li>No memory</li>
+<li>Most chatbots provide generic and repetitive responses</li>
+<li>They do not maintain user-specific personality</li>
+<li>No memory of past conversations</li>
+<li>Cannot simulate real human interaction</li>
+<li>Need for a system that gives natural and context-aware replies</li>
 </ul>
 </div>
 
+<!-- Slide 4 -->
 <div class="slide">
 <h2>Technology</h2>
 <ul>
-<li>Python</li>
-<li>Ollama</li>
-<li>Gradio</li>
-<li>gTTS</li>
+<li>Python – used for backend logic</li>
+<li>Ollama – runs the LLM locally</li>
+<li>Gradio – creates user interface</li>
+<li>gTTS – converts text into voice</li>
+<li>JSON – stores chat history and memory</li>
+<li>Threading – used for smooth voice execution</li>
 </ul>
 </div>
 
+<!-- Slide 5 -->
 <div class="slide">
 <h2>Flowchart</h2>
+<p>This diagram shows how user input flows through different components of the system.</p>
+<p>Each stage processes the data step-by-step to generate a final response.</p>
 
 <div class="flow">
 <div class="box">User Input</div>
@@ -143,29 +153,102 @@ button {
 <div class="arrow">↓</div>
 <div class="box">Voice + Output</div>
 </div>
-
 </div>
 
-<!-- 🔥 IMAGE SLIDE -->
+<!-- Slide 6 -->
 <div class="slide">
-<h2>Project Output</h2>
-<p>Below is the working chatbot interface:</p>
-<img src="https://raw.githubusercontent.com/Adarshbits/PBL_project/main/PBL2.png" style="width:60%; max-width:600px;">
-</div>
-
-<div class="slide">
-<h2>Result</h2>
+<h2>Working</h2>
 <ul>
-<li>AI clone working</li>
-<li>Memory + voice working</li>
+<li>User enters input through the interface</li>
+<li>System builds a prompt using personality and previous chats</li>
+<li>Prompt is sent to the LLM model</li>
+<li>Model generates a response based on context</li>
+<li>Response is cleaned and formatted</li>
+<li>Voice output is generated using gTTS</li>
+<li>Final response is displayed to user</li>
+<li>Conversation is stored in memory for future use</li>
 </ul>
 </div>
 
+<!-- Slide 7 -->
 <div class="slide">
-<h1>Thank You</h1>
+<h2>Key Features</h2>
+<ul>
+<li>AI Digital Twin with personalized responses</li>
+<li>Memory system using JSON storage</li>
+<li>Voice output integration</li>
+<li>Local AI execution (no internet required)</li>
+<li>Fast response generation</li>
+<li>Clean and simple user interface</li>
+</ul>
 </div>
 
-<!-- NAVIGATION -->
+<!-- Slide 8 -->
+<div class="slide">
+<h2>Challenges</h2>
+<ul>
+<li>Incorrect model version caused no responses</li>
+<li>Difficulty in extracting correct output from model</li>
+<li>UI was not displaying responses initially</li>
+<li>Handling GitHub push and merge conflicts</li>
+<li>Ensuring smooth voice playback</li>
+</ul>
+</div>
+
+<!-- Slide 9 -->
+<div class="slide">
+<h2>Solutions</h2>
+<ul>
+<li>Used correct model version (llama3.2:1b)</li>
+<li>Improved response parsing logic</li>
+<li>Debugged UI integration step-by-step</li>
+<li>Used Git rebase to resolve conflicts</li>
+<li>Optimized prompt structure for better responses</li>
+</ul>
+</div>
+
+<!-- Slide 10 -->
+<div class="slide">
+<h2>Results</h2>
+<ul>
+<li>Successfully built AI Digital Twin system</li>
+<li>Responses are context-aware and personalized</li>
+<li>Memory system stores and retrieves past chats</li>
+<li>Voice output works smoothly</li>
+<li>System performs efficiently in local environment</li>
+</ul>
+</div>
+
+<!-- Slide 11 -->
+<div class="slide">
+<h2>Future Scope</h2>
+<ul>
+<li>Upgrade to larger models like llama3:8b</li>
+<li>Add speech-to-text input</li>
+<li>Deploy application on cloud</li>
+<li>Improve UI design and animations</li>
+<li>Add support for multiple users</li>
+</ul>
+</div>
+
+<!-- Slide 12 -->
+<div class="slide">
+<h2>Conclusion</h2>
+<ul>
+<li>Project demonstrates real-world use of AI and LLM</li>
+<li>Successfully simulates human-like interaction</li>
+<li>Combines personality, memory, and voice</li>
+<li>Shows potential for digital twin applications</li>
+</ul>
+</div>
+
+<!-- Slide 13 -->
+<div class="slide">
+<h1>Thank You</h1>
+<p>Any Questions?</p>
+</div>
+
+<!-- Navigation -->
 <div class="nav">
 <button onclick="prev()">⬅ Prev</button>
 <button onclick="next()">Next ➡</button>
