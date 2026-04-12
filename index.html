@@ -1,244 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AI Human Clone Presentation</title>
+<meta charset="UTF-8">
+<title>AI Human Clone PPT</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
-            margin: 0;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    overflow: hidden;
+}
 
-        .slide {
-            padding: 60px;
-            min-height: 100vh;
-            border-bottom: 1px solid #333;
-        }
+/* Slides */
+.slide {
+    display: none;
+    height: 100vh;
+    width: 100vw;
+    padding: 60px;
+    box-sizing: border-box;
+    text-align: center;
+}
 
-        h1, h2 {
-            color: #38bdf8;
-        }
+.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
-        ul {
-            line-height: 1.8;
-        }
+h1, h2 {
+    color: #38bdf8;
+}
 
-        /* 🔥 FLOWCHART STYLING */
-        .flow-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-top: 30px;
-        }
+ul {
+    text-align: left;
+    max-width: 700px;
+    line-height: 1.8;
+}
 
-        .box {
-            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 12px;
-            width: 280px;
-            text-align: center;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            transition: transform 0.2s;
-        }
+/* Flowchart */
+.flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
 
-        .box small {
-            display: block;
-            font-weight: normal;
-            margin-top: 5px;
-            opacity: 0.9;
-        }
+.box {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    padding: 15px;
+    border-radius: 10px;
+    width: 260px;
+}
 
-        .box:hover {
-            transform: scale(1.05);
-        }
+.arrow {
+    font-size: 20px;
+}
 
-        .arrow {
-            font-size: 26px;
-            color: #38bdf8;
-        }
-    </style>
+/* Image styling */
+img {
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.6);
+    margin-top: 20px;
+}
+
+/* Navigation */
+.nav {
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    background: #38bdf8;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
+</style>
+
 </head>
 
 <body>
 
-<div class="slide">
-    <h1>AI Human Clone (Digital Twin)</h1>
-    <p>Adarsh Singh</p>
-    <p>CSE Core – 4th Semester</p>
-    <p>Manipal University Jaipur</p>
-    <p>Reg No: 2427030325</p>
-    <p>Guide: Dr. Virendra Meghwal</p>
+<!-- SLIDES -->
+
+<div class="slide active">
+<h1>AI Human Clone</h1>
+<p>Adarsh Singh</p>
+<p>CSE 4th Sem</p>
+<p>Guide: Dr. Virendra Meghwal</p>
 </div>
 
 <div class="slide">
-    <h2>Introduction</h2>
-    <ul>
-        <li>AI is evolving from generic assistants to personalized digital twins</li>
-        <li>This project mimics personality, behavior, and responses</li>
-        <li>Uses local LLM (Ollama) for privacy and control</li>
-    </ul>
+<h2>Introduction</h2>
+<ul>
+<li>AI evolving into digital twins</li>
+<li>Mimics personality & behavior</li>
+<li>Uses Ollama for local AI</li>
+</ul>
 </div>
 
 <div class="slide">
-    <h2>Problem Statement</h2>
-    <ul>
-        <li>Generic chatbots</li>
-        <li>Lack personality</li>
-        <li>No memory</li>
-        <li>Need human-like system with memory and natural responses</li>
-    </ul>
+<h2>Problem</h2>
+<ul>
+<li>Generic chatbots</li>
+<li>No personality</li>
+<li>No memory</li>
+</ul>
 </div>
 
 <div class="slide">
-    <h2>Objective</h2>
-    <ul>
-        <li>Build AI Digital Twin</li>
-        <li>Personality-based responses</li>
-        <li>Memory system</li>
-        <li>Voice output</li>
-    </ul>
+<h2>Technology</h2>
+<ul>
+<li>Python</li>
+<li>Ollama</li>
+<li>Gradio</li>
+<li>gTTS</li>
+</ul>
 </div>
 
 <div class="slide">
-    <h2>Technology Stack</h2>
-    <ul>
-        <li>Python</li>
-        <li>Ollama (llama3.2:1b)</li>
-        <li>Gradio</li>
-        <li>gTTS</li>
-        <li>JSON</li>
-    </ul>
+<h2>Flowchart</h2>
+
+<div class="flow">
+<div class="box">User Input</div>
+<div class="arrow">↓</div>
+<div class="box">UI</div>
+<div class="arrow">↓</div>
+<div class="box">Prompt Builder</div>
+<div class="arrow">↓</div>
+<div class="box">LLM</div>
+<div class="arrow">↓</div>
+<div class="box">Response</div>
+<div class="arrow">↓</div>
+<div class="box">Voice + Output</div>
+</div>
+
+</div>
+
+<!-- 🔥 IMAGE SLIDE -->
+<div class="slide">
+<h2>Project Output</h2>
+<p>Below is the working chatbot interface:</p>
+<img src="PBL2.png" style="width:60%; max-width:600px;">
 </div>
 
 <div class="slide">
-    <h2>System Architecture</h2>
-    <p>User → UI → Backend → LLM → Response → Voice → Display</p>
-</div>
-
-<!-- 🔥 PROFESSIONAL FLOWCHART -->
-<div class="slide">
-    <h2>Flowchart</h2>
-
-    <div class="flow-container">
-
-        <div class="box">User Input</div>
-        <div class="arrow">↓</div>
-
-        <div class="box">Gradio UI</div>
-        <div class="arrow">↓</div>
-
-        <div class="box">
-            Prompt Builder
-            <small>(Personality + Memory)</small>
-        </div>
-        <div class="arrow">↓</div>
-
-        <div class="box">
-            Ollama LLM
-            <small>(llama3.2:1b)</small>
-        </div>
-        <div class="arrow">↓</div>
-
-        <div class="box">
-            Response Processing
-            <small>(Clean & Limit)</small>
-        </div>
-        <div class="arrow">↓</div>
-
-        <div class="box">
-            Voice Generation
-            <small>(gTTS)</small>
-        </div>
-        <div class="arrow">↓</div>
-
-        <div class="box">Display Output</div>
-        <div class="arrow">↓</div>
-
-        <div class="box">Save to Memory (JSON)</div>
-
-    </div>
+<h2>Result</h2>
+<ul>
+<li>AI clone working</li>
+<li>Memory + voice working</li>
+</ul>
 </div>
 
 <div class="slide">
-    <h2>Working</h2>
-    <ul>
-        <li>User input is taken</li>
-        <li>Prompt built with personality + history</li>
-        <li>Sent to model</li>
-        <li>Response processed and displayed</li>
-        <li>Voice generated</li>
-        <li>Stored in memory</li>
-    </ul>
+<h1>Thank You</h1>
 </div>
 
-<div class="slide">
-    <h2>Key Features</h2>
-    <ul>
-        <li>AI Digital Twin</li>
-        <li>Personality-based responses</li>
-        <li>Memory system</li>
-        <li>Voice output</li>
-        <li>Local AI</li>
-    </ul>
+<!-- NAVIGATION -->
+<div class="nav">
+<button onclick="prev()">⬅ Prev</button>
+<button onclick="next()">Next ➡</button>
 </div>
 
-<div class="slide">
-    <h2>Challenges</h2>
-    <ul>
-        <li>Model version issues</li>
-        <li>Response parsing errors</li>
-        <li>UI not showing output</li>
-        <li>GitHub conflicts</li>
-    </ul>
-</div>
+<script>
+let current = 0;
+const slides = document.querySelectorAll(".slide");
 
-<div class="slide">
-    <h2>Solutions</h2>
-    <ul>
-        <li>Fixed model version</li>
-        <li>Improved parsing logic</li>
-        <li>Debugged UI</li>
-        <li>Used Git rebase</li>
-    </ul>
-</div>
+function showSlide(i) {
+    slides.forEach(s => s.classList.remove("active"));
+    slides[i].classList.add("active");
+}
 
-<div class="slide">
-    <h2>Results</h2>
-    <ul>
-        <li>Working AI clone</li>
-        <li>Context-aware responses</li>
-        <li>Memory maintained</li>
-        <li>Voice output working</li>
-    </ul>
-</div>
+function next() {
+    current = (current + 1) % slides.length;
+    showSlide(current);
+}
 
-<div class="slide">
-    <h2>Future Scope</h2>
-    <ul>
-        <li>Use larger model</li>
-        <li>Speech-to-text</li>
-        <li>Cloud deployment</li>
-        <li>Better UI</li>
-    </ul>
-</div>
+function prev() {
+    current = (current - 1 + slides.length) % slides.length;
+    showSlide(current);
+}
 
-<div class="slide">
-    <h2>Conclusion</h2>
-    <ul>
-        <li>Built personalized AI chatbot</li>
-        <li>Demonstrates digital twin concept</li>
-    </ul>
-</div>
-
-<div class="slide">
-    <h1>Thank You</h1>
-</div>
+document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") next();
+    if (e.key === "ArrowLeft") prev();
+});
+</script>
 
 </body>
 </html>
