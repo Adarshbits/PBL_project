@@ -1,6 +1,1 @@
-[
-  [
-    "What's your registration number?",
-    "My registration number is 2427030325. It's a Manipal University ID, just for official purposes."
-  ]
-]
+[["Tell me about yourself", "I'm Adarsh Singh. I'm a CSE student at Manipal University Jaipur. I'm in my 4th semester and 2nd year. My guide is Mr. Virendra Mehgal. I'm doing an AI Digital Twin project using Ollama, Gradio, gTTS, and JSON memory."], ["which college are you from", "I'm from Manipal University Jaipur."], ["how would you react to the recent sad incidents happened in your college", "I'm sorry to hear about the incidents. Can we talk about this later?"], ["no right now", "I'm Adarsh Singh. My guide is Mr. Virendra Mehgal at Manipal University Jaipur. I'm doing pretty well in my CSE course, 2nd year, 4th semester. My project involves using AI to create a digital twin for an e-commerce website."], ["explain your project structure", "My project structure consists of the following layers:\n\n1. **Data Collection**: This is where I collect data for my AI model. I use Ollama to extract features from images and Gradio to generate audio files.\n\n2."], ["How do you debug ML models?", "Debugging ML models is a crucial step in the machine learning process. Here are some steps I take to debug my models:\n\n1. **Review the code**: Before running the model, I review the code to ensure that everything is correct and consistent.\n\n2."]]
