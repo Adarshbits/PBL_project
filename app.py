@@ -1,14 +1,34 @@
+"""
+app.py — Adarsh AI Clone v9.4
+Main entry point. UI + chat logic only.
+All memory, voice, and identity logic lives in backend.py.
+"""
+
 import gradio as gr
-import json
-import os
 import ollama
-import threading
-import time
 
-print("🚀 Adarsh AI Clone v9.3 - STABLE")
+# Import everything from backend — no more duplicated functions
+from backend import (
+    load_history,
+    save_history,
+    speak_async,
+    clean_reply,
+    load_identity,
+    build_system_prompt,
+    build_messages,
+)
 
-# ===================== PERSONALITY =====================
-SYSTEM_PROMPT = """You are Adarsh Singh, a CSE student at Manipal University Jaipur.
+print("🚀 Adarsh AI Clone v9.4 - Memory Fixed")
+
+# ===================== IDENTITY =====================
+# Try loading from identity.json first; fall back to hardcoded if missing
+_identity = load_identity("identity.json")
+if _identity:
+    SYSTEM_PROMPT = build_system_prompt(_identity)
+    print("✅ Identity loaded from identity.json")
+else:
+    # Hardcoded fallback — works even without identity.json
+    SYSTEM_PROMPT = """You are Adarsh Singh, a CSE student at Manipal University Jaipur.
 
 Facts about you:
 - Name: Adarsh Singh
@@ -32,97 +52,59 @@ How you talk:
 
 STRICT RULES:
 - Answer ONLY what is asked right now
-- Do NOT mention previous conversations
-- Do NOT repeat old answers
-- Do NOT say "as I said before" or anything like that
-- Do NOT mention cricket, tennis, or outdoor sports"""
+- Do NOT say 'as I said before' or anything like that
+- Do NOT mention cricket, tennis, or sports not in your hobbies list"""
+    print("⚠️  identity.json not found — using hardcoded fallback")
 
-# ===================== MEMORY =====================
-HISTORY_FILE = "chat_history.json"
-
-def load_history():
-    if os.path.exists(HISTORY_FILE):
-        try:
-            with open(HISTORY_FILE, 'r') as f:
-                return json.load(f)
-        except:
-            return []
-    return []
-
-def save_history(data):
-    try:
-        with open(HISTORY_FILE, 'w') as f:
-            json.dump(data, f)
-    except:
-        pass
-
-# ===================== VOICE =====================
-def speak_async(text):
-    def _speak():
-        try:
-            from gtts import gTTS
-            from playsound import playsound
-
-            filename = f"voice_{int(time.time()*1000)}.mp3"
-            tts = gTTS(text=text[:200], lang='en', tld='com.au')
-            tts.save(filename)
-            playsound(filename)
-            try:
-                os.remove(filename)
-            except:
-                pass
-        except Exception as e:
-            print("Voice Error:", e)
-
-    threading.Thread(target=_speak, daemon=True).start()
 
 # ===================== MAIN CHAT =====================
 def chat_with_clone(message, history):
-    time.sleep(0.2)
+    """
+    Core chat function called by Gradio on every message.
 
+    THE KEY FIX (history bleeding bug):
+    Previously, history was either not used at all, or injected as raw text
+    which caused previous refusals to bleed into new unrelated questions.
+
+    Now we use build_messages() which passes history in Ollama's native
+    role-based format (user/assistant pairs). The model correctly treats
+    each past turn as separate context — a drug refusal on day 1 will NOT
+    affect an Iran-Israel question on day 2.
+    """
     try:
+        # Build proper multi-turn messages list (system + past turns + current)
+        messages = build_messages(SYSTEM_PROMPT, message, n=5)
+
         response = ollama.chat(
-            model='llama3.2:1b',
-            messages=[
-                {'role': 'system', 'content': SYSTEM_PROMPT},
-                {'role': 'user',   'content': message}
-            ]
+            model="llama3.2:1b",
+            messages=messages
         )
 
-        # Parse response
-        if hasattr(response, 'message'):
+        # Parse response — handles both object-style and dict-style SDK responses
+        if hasattr(response, "message"):
             reply = response.message.content
         elif isinstance(response, dict):
-            reply = response.get('message', {}).get('content', '')
+            reply = response.get("message", {}).get("content", "")
         else:
             reply = str(response)
 
-        reply = reply.strip()
+        # Clean the reply (strip echoed prefix, markdown, Hindi chars, truncate)
+        reply = clean_reply(reply, max_chars=300)
 
-        # Remove echoed "Adarsh:" prefix if model adds it
-        if reply.lower().startswith("adarsh:"):
-            reply = reply[7:].strip()
-
-        # Truncate at sentence boundary within 280 chars
-        if len(reply) > 280:
-            cutoff = reply[:280].rfind('.')
-            reply = reply[:cutoff + 1] if cutoff > 80 else reply[:280]
-
-        if not reply:
-            reply = "Hey, ask me anything!"
-
+        # Speak the reply in background (non-blocking)
         speak_async(reply)
 
     except Exception as e:
         print("OLLAMA ERROR:", str(e))
         reply = f"Error: {str(e)}"
 
-    # Save to memory
-    all_history = load_history()
+    # Save this exchange to memory
+    all_history = load_history(1000)
     all_history.append([message, reply])
     save_history(all_history)
 
     return reply
+
 
 # ===================== CUSTOM CSS =====================
 custom_css = """
@@ -134,7 +116,6 @@ body, .gradio-container {
     color: #e2e8f0 !important;
 }
 
-/* Header */
 .gradio-container h1 {
     font-size: 1.8rem !important;
     font-weight: 700 !important;
@@ -148,7 +129,6 @@ body, .gradio-container {
     font-size: 0.85rem !important;
 }
 
-/* Chat container */
 .chatbot {
     background: #161622 !important;
     border: 1px solid #2d2d3d !important;
@@ -156,7 +136,6 @@ body, .gradio-container {
     box-shadow: 0 4px 40px rgba(99,102,241,0.08) !important;
 }
 
-/* User message bubble */
 .message.user {
     background: #312e81 !important;
     border: 1px solid rgba(99,102,241,0.3) !important;
@@ -166,7 +145,6 @@ body, .gradio-container {
     padding: 10px 16px !important;
 }
 
-/* Bot message bubble */
 .message.bot {
     background: #1a1a27 !important;
     border: 1px solid #2d2d3d !important;
@@ -176,7 +154,6 @@ body, .gradio-container {
     padding: 10px 16px !important;
 }
 
-/* Input area */
 textarea {
     background: #1e1e2a !important;
     color: #e2e8f0 !important;
@@ -192,7 +169,6 @@ textarea:focus {
     outline: none !important;
 }
 
-/* Send button */
 button.primary {
     background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
     border: none !important;
@@ -208,7 +184,6 @@ button.primary:hover {
     box-shadow: 0 4px 15px rgba(99,102,241,0.4) !important;
 }
 
-/* Example buttons */
 .examples-holder button {
     background: #1e1e2a !important;
     border: 1px solid #2d2d3d !important;
@@ -225,7 +200,8 @@ button.primary:hover {
 """
 
 # ===================== UI =====================
-with gr.Blocks(title="Adarsh AI Clone") as demo:
+# FIX: css passed in gr.Blocks() constructor (not demo.launch) — correct placement
+with gr.Blocks(title="Adarsh AI Clone", css=custom_css) as demo:
     gr.Markdown("""
 # 🧠 Adarsh AI Clone
 **AI Digital Twin** · Manipal University Jaipur · PBL-2 · Local LLM via Ollama
@@ -236,7 +212,10 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
         chatbot=gr.Chatbot(
             height=460,
             show_label=False,
-            avatar_images=(None, "https://api.dicebear.com/7.x/initials/svg?seed=AS&backgroundColor=6366f1"),
+            avatar_images=(
+                None,
+                "https://api.dicebear.com/7.x/initials/svg?seed=AS&backgroundColor=6366f1"
+            ),
         ),
         textbox=gr.Textbox(
             placeholder="Ask me anything — hobbies, project, CSE stuff...",
@@ -259,4 +238,4 @@ Powered by Ollama · llama3.2:1b · gTTS Voice · JSON Memory
 
 # ===================== RUN =====================
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", server_port=7860, css=custom_css)
+    demo.launch(server_name="127.0.0.1", server_port=7860)

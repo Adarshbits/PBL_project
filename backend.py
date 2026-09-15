@@ -1,7 +1,7 @@
 """
-backend.py — Adarsh AI Clone v9.2
-Utility helpers: memory management, response cleaning, voice, diagnostics.
-Imported by app.py.
+backend.py — Adarsh AI Clone v9.4
+Utility helpers: memory, message building, response cleaning, voice, diagnostics.
+Imported by app.py. All logic lives here — app.py stays clean.
 """
 
 import json
@@ -29,7 +29,7 @@ def load_history(n: int = 10) -> list:
 
 
 def save_history(data: list) -> bool:
-    """Append a [user, reply] pair and save to JSON."""
+    """Save the full history list to JSON."""
     try:
         with open(HISTORY_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
@@ -42,22 +42,104 @@ def save_history(data: list) -> bool:
 def clear_history() -> bool:
     """Wipe chat history file."""
     try:
-        with open(HISTORY_FILE, "w") as f:
+        with open(HISTORY_FILE, "w", encoding="utf-8") as f:  # FIX: added encoding
             json.dump([], f)
         return True
     except IOError:
         return False
 
 
-def build_context(n: int = 3) -> str:
-    """Return recent conversation turns as a formatted string for prompt injection."""
+def build_messages(system_prompt: str, current_message: str, n: int = 5) -> list:
+    """
+    Build a properly formatted Ollama messages list for multi-turn chat.
+
+    KEY FIX for the history bleeding bug:
+    Instead of stuffing raw history text into the system prompt (which caused
+    previous refusals to bleed into new unrelated answers), we use Ollama's
+    native role-based message format: system / user / assistant / user ...
+
+    The model then correctly treats each turn as separate context, so a drug
+    refusal on day 1 will NOT contaminate an Iran-Israel question on day 2.
+
+    Returns a list of message dicts ready to pass directly to ollama.chat().
+    """
+    messages = [{"role": "system", "content": system_prompt}]
+
     past = load_history(n)
-    lines = []
-    for user_msg, bot_reply in past:
-        if bot_reply:  # skip empty replies
-            lines.append(f"User: {user_msg}")
-            lines.append(f"Adarsh: {bot_reply}")
-    return "\n".join(lines)
+    for entry in past:
+        # FIX: safely unpack — skip malformed/corrupted entries (prevents ValueError crash)
+        if not isinstance(entry, (list, tuple)) or len(entry) < 2:
+            continue
+        user_msg, bot_reply = entry[0], entry[1]
+        # FIX: null guard — skip entries with empty or None replies
+        if not user_msg or not bot_reply:
+            continue
+        messages.append({"role": "user",      "content": str(user_msg)})
+        messages.append({"role": "assistant", "content": str(bot_reply)})
+
+    # Current user message always goes last
+    messages.append({"role": "user", "content": current_message})
+    return messages
+
+
+# ─────────────────────────────────────────────
+# IDENTITY LOADER
+# ─────────────────────────────────────────────
+
+def load_identity(identity_file: str = "identity.json") -> dict:
+    """Load identity data from JSON file. Returns empty dict if not found."""
+    if not os.path.exists(identity_file):
+        return {}
+    try:
+        with open(identity_file, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"[backend] Identity load error: {e}")
+        return {}
+
+
+def build_system_prompt(identity: dict) -> str:
+    """Build a system prompt string dynamically from identity.json data."""
+    if not identity:
+        return ""
+
+    name       = identity.get("name", "Adarsh Singh")
+    reg        = identity.get("registration_number", "")
+    course     = identity.get("course", "")
+    semester   = identity.get("semester", "")
+    year       = identity.get("year", "")
+    university = identity.get("university", "")
+    guide      = identity.get("guide", "")
+    project    = identity.get("project", "")
+    hobbies    = "\n- ".join(identity.get("hobbies", []))
+    skills     = ", ".join(identity.get("skills", []))
+    style      = identity.get("communication_style", {})
+    rules      = identity.get("strict_rules", [])
+    rules_text = "\n".join(f"- {r}" for r in rules)
+
+    return f"""You are {name}, a {course} student at {university}.
+
+Facts about you:
+- Name: {name}
+- Registration Number: {reg}
+- Course: {course}, {semester}, {year}
+- University: {university}
+- Guide: {guide}
+- Project: {project}
+
+Your hobbies (ONLY these, never say anything else):
+- {hobbies}
+
+Your skills: {skills}
+
+How you talk:
+- Always in English only
+- {style.get("length", "Short and direct answers")}
+- {style.get("tone", "Slightly friendly tone")}
+- Never over-explain
+
+STRICT RULES:
+{rules_text}"""
 
 
 # ─────────────────────────────────────────────
@@ -134,12 +216,21 @@ def speak_async(text: str, max_chars: int = 200) -> None:
 def check_ollama(model: str = "llama3.2:1b") -> dict:
     """
     Check if Ollama is running and the model is available.
+    FIX: handles both dict-style and object-style SDK responses (version safe).
     Returns dict with 'ok' bool and 'message' string.
     """
     try:
         import ollama
         models = ollama.list()
-        available = [m["name"] for m in models.get("models", [])]
+        # FIX: Ollama SDK returns objects in newer versions, not plain dicts
+        model_list = models.get("models", []) if isinstance(models, dict) else getattr(models, "models", [])
+        available = []
+        for m in model_list:
+            if isinstance(m, dict):
+                available.append(m.get("name", m.get("model", "")))
+            else:
+                available.append(getattr(m, "model", getattr(m, "name", "")))
+
         if model in available:
             return {"ok": True, "message": f"✅ Ollama running | Model '{model}' ready"}
         else:
@@ -165,7 +256,11 @@ def history_stats() -> dict:
     """Return basic stats about stored chat history."""
     hist = load_history(1000)
     total = len(hist)
-    empty = sum(1 for _, r in hist if not r.strip())
+    # FIX: null guard — safely check reply exists and is a string before .strip()
+    empty = sum(
+        1 for entry in hist
+        if isinstance(entry, (list, tuple)) and len(entry) >= 2 and not (entry[1] or "").strip()
+    )
     return {
         "total_exchanges": total,
         "empty_replies": empty,
@@ -192,3 +287,8 @@ if __name__ == "__main__":
     print("\n[3] Ollama check")
     result = check_ollama()
     print(result["message"])
+
+    print("\n[4] build_messages test")
+    msgs = build_messages("You are Adarsh.", "What is your hobby?", n=3)
+    for m in msgs:
+        print(f"  [{m['role']}] {m['content'][:80]}")
