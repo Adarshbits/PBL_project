@@ -9,6 +9,7 @@ import os
 import re
 import threading
 import time
+from datetime import datetime
 
 HISTORY_FILE = "chat_history.json"
 
@@ -54,16 +55,20 @@ def build_messages(system_prompt: str, current_message: str, n: int = 5) -> list
     Build a properly formatted Ollama messages list for multi-turn chat.
 
     KEY FIX for the history bleeding bug:
-    Instead of stuffing raw history text into the system prompt (which caused
-    previous refusals to bleed into new unrelated answers), we use Ollama's
-    native role-based message format: system / user / assistant / user ...
+    Uses Ollama's native role-based message format so previous refusals
+    cannot bleed into new unrelated answers.
 
-    The model then correctly treats each turn as separate context, so a drug
-    refusal on day 1 will NOT contaminate an Iran-Israel question on day 2.
+    Also injects current date/time so the AI always knows what time it is.
 
     Returns a list of message dicts ready to pass directly to ollama.chat().
     """
-    messages = [{"role": "system", "content": system_prompt}]
+    # Inject live date and time — re-computed every call so it's always accurate
+    now = datetime.now()
+    time_str = now.strftime("%A, %d %B %Y, %I:%M %p")
+    time_injection = f"\n\nCurrent date and time: {time_str} IST (India Standard Time)"
+    full_system = system_prompt + time_injection
+
+    messages = [{"role": "system", "content": full_system}]
 
     past = load_history(n)
     for entry in past:
