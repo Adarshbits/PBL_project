@@ -18,14 +18,14 @@ from backend import (
     build_messages,
 )
 
-print("🚀 Adarsh AI Clone v9.4 - Memory Fixed")
+print("Adarsh AI Clone v9.4 - Memory Fixed")
 
 # ===================== IDENTITY =====================
 # Try loading from identity.json first; fall back to hardcoded if missing
 _identity = load_identity("identity.json")
 if _identity:
     SYSTEM_PROMPT = build_system_prompt(_identity)
-    print("✅ Identity loaded from identity.json")
+    print("Identity loaded from identity.json")
 else:
     # Hardcoded fallback — works even without identity.json
     SYSTEM_PROMPT = """You are Adarsh Singh, a CSE student at Manipal University Jaipur.
@@ -54,7 +54,7 @@ STRICT RULES:
 - Answer ONLY what is asked right now
 - Do NOT say 'as I said before' or anything like that
 - Do NOT mention cricket, tennis, or sports not in your hobbies list"""
-    print("⚠️  identity.json not found — using hardcoded fallback")
+    print("WARNING: identity.json not found -- using hardcoded fallback")
 
 
 # ===================== MAIN CHAT =====================
@@ -201,7 +201,7 @@ button.primary:hover {
 
 # ===================== UI =====================
 # FIX: css passed in gr.Blocks() constructor (not demo.launch) — correct placement
-with gr.Blocks(title="Adarsh AI Clone", css=custom_css) as demo:
+with gr.Blocks(title="Adarsh AI Clone") as demo:
     gr.Markdown("""
 # 🧠 Adarsh AI Clone
 **AI Digital Twin** · Manipal University Jaipur · PBL-2 · Local LLM via Ollama
@@ -238,4 +238,4 @@ Powered by Ollama · llama3.2:1b · gTTS Voice · JSON Memory
 
 # ===================== RUN =====================
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", server_port=7860)
+    demo.launch(server_name="127.0.0.1", server_port=7860, css=custom_css)
