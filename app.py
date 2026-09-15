@@ -100,25 +100,93 @@ def transcribe_audio(audio_data):
         return f"[Transcription error: {e}]"
 
 
-# ===================== MAIN CHAT =====================
+# ===================== MAIN CHAT (STREAMING) =====================
 def chat_with_clone(message, history):
     """
-    Core chat function — handles a text message, returns bot reply.
-    history is a list of {"role": ..., "content": ...} dicts (Gradio 6.0 format).
+    Streaming chat function — text appears word-by-word as Ollama generates.
+    Voice plays AFTER the full reply is ready.
+    Yields (cleared_input, updated_history) on each chunk.
     """
     if not message or not message.strip():
-        return "", history
+        yield "", history
+        return
+
+    # Add user message to chat immediately
+    user_msg = message.strip()
+    history = history + [
+        {"role": "user", "content": user_msg},
+        {"role": "assistant", "content": ""},
+    ]
 
     try:
         # Build proper multi-turn messages with role-based history
-        messages = build_messages(SYSTEM_PROMPT, message.strip(), n=5)
+        messages = build_messages(SYSTEM_PROMPT, user_msg, n=5)
+
+        # Stream response — text appears word by word
+        raw_reply = ""
+        stream = ollama.chat(
+            model="llama3.2:3b",
+            messages=messages,
+            stream=True,
+        )
+
+        for chunk in stream:
+            # Handle both object and dict SDK styles
+            if hasattr(chunk, "message"):
+                token = chunk.message.content or ""
+            elif isinstance(chunk, dict):
+                token = chunk.get("message", {}).get("content", "")
+            else:
+                token = ""
+
+            raw_reply += token
+
+            # Update the last assistant message with partial text
+            history[-1]["content"] = raw_reply
+            yield "", history
+
+        # Final cleaning after full response is assembled
+        reply = clean_reply(raw_reply)
+        history[-1]["content"] = reply
+        yield "", history
+
+        # Voice plays AFTER text is fully visible
+        speak_async(reply)
+
+    except Exception as e:
+        print("OLLAMA ERROR:", str(e))
+        reply = f"Error connecting to Ollama: {str(e)}"
+        history[-1]["content"] = reply
+        yield "", history
+
+    # Save to persistent memory
+    all_history = load_history(1000)
+    all_history.append([user_msg, history[-1]["content"]])
+    save_history(all_history)
+
+
+def voice_send(audio_data, history):
+    """
+    Transcribe mic audio -> send to chat -> return updated history + transcribed text.
+    Non-streaming version for mic input (streaming not needed here since
+    the user already waited for transcription).
+    """
+    transcribed = transcribe_audio(audio_data)
+
+    # If transcription failed or returned an error tag, show message but don't send to AI
+    if not transcribed or transcribed.startswith("["):
+        return transcribed, history
+
+    # For mic input, use non-streaming path for simplicity
+    user_msg = transcribed.strip()
+    try:
+        messages = build_messages(SYSTEM_PROMPT, user_msg, n=5)
 
         response = ollama.chat(
             model="llama3.2:3b",
-            messages=messages
+            messages=messages,
         )
 
-        # Parse response — handles both object and dict SDK styles
         if hasattr(response, "message"):
             reply = response.message.content
         elif isinstance(response, dict):
@@ -135,30 +203,13 @@ def chat_with_clone(message, history):
 
     # Save to persistent memory
     all_history = load_history(1000)
-    all_history.append([message.strip(), reply])
+    all_history.append([user_msg, reply])
     save_history(all_history)
 
-    # Gradio 6.0 format: list of dicts with role/content keys
     history = history + [
-        {"role": "user",      "content": message.strip()},
+        {"role": "user", "content": user_msg},
         {"role": "assistant", "content": reply},
     ]
-    return "", history
-
-
-def voice_send(audio_data, history):
-    """
-    Transcribe mic audio -> send to chat -> return updated history + transcribed text.
-    history is in Gradio 6.0 dict format (list of role/content dicts).
-    """
-    transcribed = transcribe_audio(audio_data)
-
-    # If transcription failed or returned an error tag, show message but don't send to AI
-    if not transcribed or transcribed.startswith("["):
-        return transcribed, history
-
-    # Send transcribed text through normal chat pipeline
-    _, history = chat_with_clone(transcribed, history)
     return transcribed, history
 
 
