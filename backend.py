@@ -272,32 +272,48 @@ def clean_reply(raw: str, max_chars: int = 300) -> str:
 
 
 # ─────────────────────────────────────────────
-# VOICE (async, non-blocking)
+# VOICE (async, non-blocking via F5-TTS)
 # ─────────────────────────────────────────────
 
 def speak_async(text: str, max_chars: int = 200) -> None:
-    """Play TTS audio in a background thread using gTTS."""
+    """Play TTS audio in a background thread using F5-TTS Voice Cloning."""
     def _speak():
         try:
-            from gtts import gTTS
+            import subprocess
             from playsound import playsound
+            import os
 
             safe_text = re.sub(r"[^\x00-\x7F]+", "", text)[:max_chars]  # ASCII only for TTS
             if not safe_text.strip():
                 return
 
-            filename = f"voice_{int(time.time() * 1000)}.mp3"
-            tts = gTTS(text=safe_text, lang="en", tld="com.au")
-            tts.save(filename)
-            playsound(filename)
-
-            try:
-                os.remove(filename)
-            except OSError:
-                pass
+            filename = f"voice_{int(time.time() * 1000)}.wav"
+            
+            # Use F5-TTS to clone Adarsh's voice based on the provided sample
+            cmd = [
+                "python", "-m", "f5_tts.infer.infer_cli",
+                "--model", "F5TTS_Base",
+                "-r", "adarsh_voice.wav",
+                "-s", "hello my name is Adarsh Singh and I am a CSE student at Manipal University Jaipur I am currently in my 3rd year 5th semester my project is a digital twin and it is guided under the professor Mr Virendra Kumar Megha",
+                "-t", safe_text,
+                "-w", filename,
+                "-o", "."
+            ]
+            
+            print(f"[backend] Generating Voice Clone (F5-TTS) for: '{safe_text[:30]}...'")
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            
+            if os.path.exists(filename):
+                playsound(filename)
+                try:
+                    os.remove(filename)
+                except OSError:
+                    pass
+            else:
+                print(f"[backend] Voice clone generation failed: {result.stderr}")
 
         except ImportError:
-            print("[backend] gTTS or playsound not installed. Skipping voice.")
+            print("[backend] F5-TTS or playsound not installed. Skipping voice.")
         except Exception as e:
             print(f"[backend] Voice error: {e}")
 
