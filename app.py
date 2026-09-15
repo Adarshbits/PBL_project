@@ -1,5 +1,5 @@
 """
-app.py — Adarsh AI Clone v9.5
+app.py — Adarsh AI Clone v9.7
 Main entry point. Chat UI + voice input mic.
 All memory, voice, identity logic lives in backend.py.
 """
@@ -22,7 +22,7 @@ from backend import (
     build_messages,
 )
 
-print("Adarsh AI Clone v9.6 - llama3.2:3b + Personality Engine")
+print("Adarsh AI Clone v9.7 - llama3.2:3b + Personality + Edge-TTS")
 
 # ===================== IDENTITY + KNOWLEDGE + PERSONALITY =====================
 _identity = load_identity("identity.json")
@@ -126,7 +126,7 @@ def chat_with_clone(message, history):
         else:
             reply = str(response)
 
-        reply = clean_reply(reply, max_chars=300)
+        reply = clean_reply(reply)
         speak_async(reply)
 
     except Exception as e:
@@ -318,7 +318,7 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
     # ── Footer ──────────────────────────────────────────────
     gr.Markdown("""
 <div style="text-align:center; color:#475569; font-size:0.75rem; margin-top:16px;">
-Powered by Ollama · llama3.2:3b · gTTS Voice · JSON Memory · SpeechRecognition Mic
+Powered by Ollama · llama3.2:3b · Edge-TTS Voice · JSON Memory · SpeechRecognition Mic
 </div>
 """)
 
@@ -348,4 +348,4 @@ Powered by Ollama · llama3.2:3b · gTTS Voice · JSON Memory · SpeechRecogniti
 
 # ===================== RUN =====================
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", server_port=7860, css=custom_css)
+    demo.launch(server_name="127.0.0.1", css=custom_css)

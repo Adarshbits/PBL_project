@@ -1,6 +1,6 @@
 """
-backend.py — Adarsh AI Clone v9.4
-Utility helpers: memory, message building, response cleaning, voice, diagnostics.
+backend.py — Adarsh AI Clone v9.7
+Utility helpers: memory, message building, response cleaning, voice (Edge-TTS), diagnostics.
 Imported by app.py. All logic lives here — app.py stays clean.
 """
 
@@ -241,7 +241,7 @@ STRICT RULES:
 # RESPONSE CLEANING
 # ─────────────────────────────────────────────
 
-def clean_reply(raw: str, max_chars: int = 300) -> str:
+def clean_reply(raw: str, max_chars: int = 500) -> str:
     """
     Clean LLM output:
     - Strip 'Adarsh:' prefix echoed by model
@@ -275,38 +275,35 @@ def clean_reply(raw: str, max_chars: int = 300) -> str:
 # VOICE (async, non-blocking via Edge-TTS)
 # ─────────────────────────────────────────────
 
-def speak_async(text: str, max_chars: int = 200) -> None:
+def speak_async(text: str) -> None:
     """Play TTS audio in a background thread using Microsoft Edge TTS (Fast & Realistic)."""
     def _speak():
         try:
             import asyncio
             import edge_tts
             from playsound import playsound
-            import os
-            import time
-            import re
 
-            safe_text = re.sub(r"[^\x00-\x7F]+", "", text)[:max_chars]  # ASCII only for TTS
-            if not safe_text.strip():
+            # Strip non-ASCII chars for TTS compatibility, but read the FULL reply
+            safe_text = re.sub(r"[^\x00-\x7F]+", "", text).strip()
+            if not safe_text:
                 return
 
             filename = f"voice_{int(time.time() * 1000)}.mp3"
-            
-            # Use Edge TTS with a natural Indian male voice
+
+            # Indian male neural voice — fast, natural, free
             voice = "en-IN-PrabhatNeural"
-            
+
             async def generate_and_play():
                 communicate = edge_tts.Communicate(safe_text, voice)
                 await communicate.save(filename)
-                
+
                 if os.path.exists(filename):
                     playsound(filename)
                     try:
                         os.remove(filename)
                     except OSError:
                         pass
-            
-            # Run async function in this thread
+
             asyncio.run(generate_and_play())
 
         except ImportError:
