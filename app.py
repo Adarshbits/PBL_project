@@ -102,7 +102,7 @@ def transcribe_audio(audio_data):
 def chat_with_clone(message, history):
     """
     Core chat function — handles a text message, returns bot reply.
-    history is managed by Gradio as list of [user, bot] pairs.
+    history is a list of {"role": ..., "content": ...} dicts (Gradio 6.0 format).
     """
     if not message or not message.strip():
         return "", history
@@ -136,19 +136,22 @@ def chat_with_clone(message, history):
     all_history.append([message.strip(), reply])
     save_history(all_history)
 
-    # Update Gradio chatbot display
-    history = history + [[message.strip(), reply]]
+    # Gradio 6.0 format: list of dicts with role/content keys
+    history = history + [
+        {"role": "user",      "content": message.strip()},
+        {"role": "assistant", "content": reply},
+    ]
     return "", history
 
 
 def voice_send(audio_data, history):
     """
-    Transcribe mic audio → send to chat → return updated history + transcribed text.
-    Called when user submits a voice recording.
+    Transcribe mic audio -> send to chat -> return updated history + transcribed text.
+    history is in Gradio 6.0 dict format (list of role/content dicts).
     """
     transcribed = transcribe_audio(audio_data)
 
-    # If transcription failed or returned an error tag, show it but don't send to AI
+    # If transcription failed or returned an error tag, show message but don't send to AI
     if not transcribed or transcribed.startswith("["):
         return transcribed, history
 
@@ -262,6 +265,7 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
         value=[],
         height=420,
         show_label=False,
+        type="messages",   # Gradio 6.0 — use role/content dict format
         avatar_images=(
             None,
             "https://api.dicebear.com/7.x/initials/svg?seed=AS&backgroundColor=6366f1"
@@ -333,8 +337,8 @@ Powered by Ollama · llama3.2:1b · gTTS Voice · JSON Memory · SpeechRecogniti
         outputs=[msg_box, chatbot],
     )
 
-    # Voice send — auto fires when recording stops
-    mic_input.stop_recording(
+    # Voice send — fires when audio recording is submitted/changed
+    mic_input.change(
         fn=voice_send,
         inputs=[mic_input, chatbot],
         outputs=[transcribed_box, chatbot],
