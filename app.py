@@ -265,7 +265,6 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
         value=[],
         height=420,
         show_label=False,
-        type="messages",   # Gradio 6.0 — use role/content dict format
         avatar_images=(
             None,
             "https://api.dicebear.com/7.x/initials/svg?seed=AS&backgroundColor=6366f1"
