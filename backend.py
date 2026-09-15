@@ -98,6 +98,37 @@ def load_identity(identity_file: str = "identity.json") -> dict:
         return {}
 
 
+def load_knowledge_base(kb_file: str = "knowledge_base.json") -> str:
+    """
+    Load knowledge_base.json and return it as a flat string to inject into
+    the system prompt. Expands the AI's dataset beyond the basic identity facts.
+    """
+    if not os.path.exists(kb_file):
+        return ""
+    try:
+        with open(kb_file, "r", encoding="utf-8") as f:
+            kb = json.load(f)
+
+        lines = ["\n--- ADDITIONAL KNOWLEDGE ABOUT ADARSH ---"]
+        for section, entries in kb.items():
+            if section == "faqs":
+                lines.append("\nFrequently Asked Questions:")
+                for item in entries:
+                    if isinstance(item, dict):
+                        lines.append(f"  Q: {item.get('q','')}")
+                        lines.append(f"  A: {item.get('a','')}")
+            elif isinstance(entries, list):
+                lines.append(f"\n{section.upper()}:")
+                for entry in entries:
+                    if isinstance(entry, str):
+                        lines.append(f"  - {entry}")
+        lines.append("--- END KNOWLEDGE ---")
+        return "\n".join(lines)
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"[backend] Knowledge base load error: {e}")
+        return ""
+
+
 def build_system_prompt(identity: dict) -> str:
     """Build a system prompt string dynamically from identity.json data."""
     if not identity:
@@ -110,6 +141,7 @@ def build_system_prompt(identity: dict) -> str:
     year       = identity.get("year", "")
     university = identity.get("university", "")
     guide      = identity.get("guide", "")
+    guide_role = identity.get("guide_role", f"{guide} is your professor and supervisor. You are his student.")
     project    = identity.get("project", "")
     hobbies    = "\n- ".join(identity.get("hobbies", []))
     skills     = ", ".join(identity.get("skills", []))
@@ -124,7 +156,8 @@ Facts about you:
 - Registration Number: {reg}
 - Course: {course}, {semester}, {year}
 - University: {university}
-- Guide: {guide}
+- Your guide/supervisor: {guide}
+- Your role with your guide: {guide_role}
 - Project: {project}
 
 Your hobbies (ONLY these, never say anything else):
