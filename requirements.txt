@@ -1,0 +1,9 @@
+gradio>=6.0
+ollama
+numpy
+scipy
+SpeechRecognition
+edge-tts
+playsound==1.2.2
+psutil
+Pillow

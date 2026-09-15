@@ -1,0 +1,21 @@
+Adarsh AI Clone - Run Instructions
+
+1. Install dependencies:
+   python -m pip install -r requirements.txt
+
+2. Make sure Ollama is running:
+   ollama serve
+
+3. In another terminal, ensure the model exists:
+   ollama pull llama3.2:3b
+
+4. Start the app:
+   python app.py
+
+Open http://127.0.0.1:7860
+
+Avatar behavior:
+- The avatar stays idle while the response text is being generated.
+- It switches to the talking animation only while Edge-TTS voice playback is expected.
+- It returns to idle afterward.
+- Replace avatar_idle.gif and avatar_talking.gif with your own sprite GIFs if desired.

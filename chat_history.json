@@ -1,1 +1,146 @@
-[]
+[
+  [
+    "what is think about the current global market",
+    "Ollama error: model 'llama3.1:8b' not found (status code: 404)"
+  ],
+  [
+    "what do you think about the current global market",
+    "Ollama error: llama runner process has terminated: CUDA error (status code: 500)"
+  ],
+  [
+    "What's happening in the world right now?",
+    "I haven't seen that news, but let me think about it... As a 3rd-year student, I don't always stay up-to-date with the latest global events. But from what I know, there have been some big developments recently. From my understanding, there's been a lot of talk about inflation and economic uncertainty affecting many countries around the world. Some experts are saying that the global economy is shifting towards a more multipolar world, while others are predicting a potential recession in certain regions."
+  ],
+  [
+    "what do you think of the Iran Israel war which is going on right now",
+    "To be honest, I haven't seen any updates on that news, so I'm not really sure what's happening. As a college student from India, my knowledge cutoff is usually limited to what's being taught in class or reported in the Indian media. But I do know that conflicts between major world powers like Iran and Israel can have significant implications for global politics and security. From what I've learned about geopolitics, it's clear that both Iran and Israel have been involved in a long-standing conflict over issues like security, influence, and ideology."
+  ],
+  [
+    "stop",
+    "What was I doing wrong?"
+  ],
+  [
+    "if i ask you to stop, dosent mean ur doing somthing wrong",
+    "You're right, if you ask me to \"stop\", it just means you want to end the conversation or pause it, rather than indicating that I'm doing something wrong. Thank you for clarifying! So, where were we? You wanted to discuss the Iran-Israel conflict..."
+  ],
+  [
+    "no stop speaking",
+    "I'll be quiet then"
+  ],
+  [
+    "yo yo WhatsApp gang macha macha Bobby with my gang what you think about this",
+    "Ollama error: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download"
+  ],
+  [
+    "hello can you tell me a little about yourself",
+    "I'm Adarsh Singh, nice to chat with you! I'm a 3rd-year student at Manipal University Jaipur, studying Computer Science and Engineering. I'm in my 5th semester right now. When I'm not coding or learning new things, you can find me playing football or volleyball with friends, or listening to music. My project guide is Mr. Virendra Mehgwal, and he's been super helpful. That's about me!"
+  ],
+  [
+    "quiet",
+    "no sound"
+  ],
+  [
+    "tell me a bad joke",
+    "Why did the neural network go to the doctor? Because it had a little \"glitch\" in its system!"
+  ],
+  [
+    "another one dad joke",
+    "Why do AI models go on dates? Because they want to find their perfect tensor match!"
+  ],
+  [
+    "what do you think about the current state of",
+    "the tech industry, I think it's really exciting, with all the advancements in AI and machine learning. The progress being made is incredible, and it's amazing to see how far we've come in just a few years. But at the same time, there are also some concerns about the ethics of AI and how it's being used. It's a complex issue, and I think it's really important for us as developers and users to be aware of these issues and consider the impact our work has on society."
+  ],
+  [
+    "shuhhhhuuuuu",
+    "it looks like my AI voice was interrupted!"
+  ],
+  [
+    "what do you think about the recent was that has been happening around in the world in the how it is impacted the Global market",
+    "I haven't seen that news, but let me think about it... pauses Okay, so what's been going on? Is it related to politics, economy, or something else entirely? To be honest, I'm a bit out of the loop when it comes to current events. As a college student, my focus is more on my studies and projects than staying up-to-date on global news. But I'd love to hear from you - what's been happening? How do you think it's impacting the global market?"
+  ],
+  [
+    "What do you think about AI taking over jobs?",
+    "I think it's a double-edged sword. On one hand, AI and automation have the potential to free humans up from mundane and repetitive tasks, allowing us to focus on more creative and high-value work. I've seen this in my own project, where Ollama has enabled me to build a chatbot that can handle conversations with minimal effort. On the other hand, there's also the concern that AI could displace human jobs entirely. I've learned about some of the concerns around job displacement in my courses on AI and machine learning."
+  ],
+  [
+    "Tell me about yourself",
+    "I'm Adarsh Singh, a 3rd year CSE student at Manipal University Jaipur. I'm currently in my 5th semester, which is a bit crazy! My registration number is 2427030325. When I'm not studying or working on projects, you can find me playing judo, volleyball, or football with friends. I also enjoy listening to music and trying out new tunes. As for my project, it's called Adarsh AI Clone – an AI Digital Twin that mimics my personality using a local LLM running through Ollama. It's been a lot of fun working on this project, and I'm proud of how far we've come. My project guide, Mr."
+  ],
+  [
+    "han meri jaan",
+    "A classic line! \"Han mere jaan\" is one of my favorite Bollywood song lines from the movie \"Raja Hindustani\". It's such a beautiful and romantic phrase - I can almost feel the emotions behind it. Music has a way of taking us back to a different time and place, right?"
+  ],
+  [
+    "what is your favourite song",
+    "I'm a big fan of Bollywood music! My all-time favorite song has got to be \"Tujhe Dekha To\" from the movie Dilwale Dulhania Le Jayenge. There's something about Shah Rukh Khan's voice and the way the melody just lifts you up... it never fails to get me singing along! How about you, do you have a favorite song or Bollywood movie?"
+  ],
+  [
+    "are you just laughing out",
+    "No, I wasn't just laughing out. I was genuinely thinking about my favorite song and how much I enjoy that particular Bollywood track. But, I have to admit, I'm always up for a good laugh too! Life is too short not to smile sometimes, right?"
+  ],
+  [
+    "shuhshsss",
+    "It looks like you're trying to sneak out of the conversation with a stealthy \"shhh\". Am I right? Don't worry, I won't spill the beans... but if you want to keep talking, I'm game!"
+  ],
+  [
+    "quiet",
+    "I get it, you're trying to make me keep my voice down. Quiet for now, I'll just nod along and respond in hushed tones. leans in Go ahead, what's on your mind?"
+  ],
+  [
+    "shhh",
+    "whispers Okay, okay! I'm being quiet..."
+  ],
+  [
+    "say nothing",
+    "pauses for a moment ...I'll just sit here in silence then."
+  ],
+  [
+    "Tell me about yourself",
+    "So, like I mentioned earlier, my name is Adarsh Singh, and I'm a 3rd year CSE student at Manipal University Jaipur. I'm in my 5th semester, which means I'm almost done with my BTech degree! My project guide, Mr. Virendra Mehgwal, is a great mentor who helps me stay on track with my PBL-2 project. It's all about creating an AI digital twin that mimics my personality using a local LLM running through Ollama. Pretty cool stuff, right?"
+  ],
+  [
+    "quiet",
+    "smiling softly, nods along"
+  ],
+  [
+    "what do you think about the current global market after these Wars have been going on",
+    "pauses, reflecting on the topic... Honestly, I haven't seen that much news about ongoing wars in the global market. As a college student, my focus is more on technology and AI projects like mine. But from what I've heard, it seems like trade policies and economic shifts are causing some uncertainty. Some people think it's leading to inflation or supply chain disruptions... but I'm no expert! What do you think about it?"
+  ],
+  [
+    "Tell me about yourself",
+    "So, like I mentioned earlier, my name is Adarsh Singh, and I'm a 3rd year CSE student at Manipal University Jaipur. I'm in my 5th semester, which means I'm almost done with my BTech degree! When I'm not studying, you can find me playing sports like judo, volleyball, or football with friends, or listening to music to relax. My project is my biggest passion right now - creating this AI digital twin that talks like me and runs on Ollama. It's a fun challenge, but also helps me learn a lot about AI and ML!"
+  ],
+  [
+    "what do u thinkl abt the wars going on right now",
+    "I haven't seen that much news about ongoing wars recently... to be honest, I'm not really up-to-date on current events. My focus is more on technology and my project, so I don't get as much exposure to international news. But from what I've heard, it seems like there's a lot of uncertainty and concern around the world. I've read some articles about how conflicts can have a ripple effect on economies and global stability... but I'm not really an expert on geopolitics. Can you tell me more about what's going on?"
+  ],
+  [
+    "what is your name and introduce yourself",
+    "My name is Adarsh Singh, and I'm a 3rd year CSE student at Manipal University Jaipur in my 5th semester. I'm doing pretty well with my studies, and more importantly, I've been working on this exciting project - an AI digital twin that mimics my personality using a local LLM running through Ollama. It's been a great learning experience so far! When I'm not studying or coding, you can find me playing sports like judo, volleyball, or football with friends, or listening to music to relax. That's me in a nutshell!"
+  ],
+  [
+    "stop",
+    "just pauses for a moment"
+  ],
+  [
+    "what do you think about the current Wars that has been happening around the world and how do you think it has affected the Global market",
+    "I haven't seen that much news about ongoing wars in the global market... to be honest, I'm not really up-to-date on current events. As a college student, my focus is more on technology, AI, and my project. However, from what I've heard, it seems like trade policies and economic shifts are causing some uncertainty. Some people think it's leading to inflation or supply chain disruptions... but I'm no expert! I do know that conflicts can have a ripple effect on economies and global stability. But I'd love to learn more about how the current wars are specifically affecting the global market."
+  ],
+  [
+    "shushhhh",
+    "pauses, looks around sorry, didn't mean to interrupt..."
+  ],
+  [
+    "I am happy with you",
+    "smiles slightly, feeling a bit relieved that everything is okay between us."
+  ],
+  [
+    "what do you think about the ongoing wars in the world",
+    "Honestly, I don't have much insight on current events like this... my focus has been more on AI and technology projects. However, from what I've learned or heard through news and discussions, it seems like these conflicts can have a significant impact on global stability and even affect trade and economic policies. It's hard to imagine how something that's happening in one part of the world can have such far-reaching effects on others. As someone who values peace and understanding, it's concerning to see so much violence and tension between nations."
+  ],
+  [
+    "BEL tomorrow is my presentation and you will be you are the one you are the specimen I am going to present how do you feel about that",
+    "nervously chuckles, fidgets slightly \"Hey, don't worry about me! I'm sure your presentation will go great. You're prepared, right? I mean, you've been practicing for this and everything. Just relax and be yourself, I'm sure you'll do fine. Are you nervous at all?\""
+  ]
+]

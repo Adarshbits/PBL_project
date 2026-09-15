@@ -9,6 +9,7 @@ import numpy as np
 import io
 import os
 import base64
+import time
 import ollama
 
 # Import everything from backend
@@ -24,7 +25,8 @@ from backend import (
     build_messages,
 )
 
-print("Adarsh AI Clone v9.7 - llama3.2:3b + Personality + Edge-TTS")
+MODEL_NAME = "llama3.2:3b"
+print(f"Adarsh AI Clone v10.1 - {MODEL_NAME} + Personality + Edge-TTS + Animated Avatar")
 
 # ===================== IDENTITY + KNOWLEDGE + PERSONALITY =====================
 _identity = load_identity("identity.json")
@@ -85,7 +87,7 @@ TALKING_GIF_DATA = load_gif_as_data_uri(TALKING_GIF_PATH)
 def avatar_html(speaking: bool) -> str:
     """Returns the Character Zone markup, pointing at the talking or idle GIF."""
     data_uri = TALKING_GIF_DATA if speaking else IDLE_GIF_DATA
-    status = "Speaking..." if speaking else "Online — llama3.2:3b"
+    status = "Speaking..." if speaking else f"Online — {MODEL_NAME}"
 
     if data_uri:
         avatar_inner = f'<img src="{data_uri}" class="avatar-sprite" alt="Adarsh AI avatar" />'
@@ -142,6 +144,12 @@ def transcribe_audio(audio_data):
             return "[No internet for speech recognition — check your connection]"
         return f"[Transcription error: {e}]"
 
+def estimate_speech_seconds(text: str) -> float:
+    """Approximate Edge-TTS playback time so the avatar stays animated while speaking."""
+    words = max(1, len(text.split()))
+    return min(45.0, max(2.0, words / 2.4 + 0.8))
+
+
 # ===================== MAIN CHAT (STREAMING) =====================
 def chat_with_clone(message, history):
     """
@@ -167,7 +175,7 @@ def chat_with_clone(message, history):
         # Stream response — text appears word by word
         raw_reply = ""
         stream = ollama.chat(
-            model="llama3.2:3b",
+            model=MODEL_NAME,
             messages=messages,
             stream=True,
         )
@@ -183,15 +191,18 @@ def chat_with_clone(message, history):
             raw_reply += token
             # Update the last assistant message with partial text
             history[-1]["content"] = raw_reply
-            yield "", history, avatar_html(True)
+            yield "", history, avatar_html(False)
 
         # Final cleaning after full response is assembled
         reply = clean_reply(raw_reply)
         history[-1]["content"] = reply
-        yield "", history, avatar_html(False)
 
-        # Voice plays AFTER text is fully visible
+        # The avatar speaks only while audio is actually playing.
+        # It stays idle while the text is being generated.
+        yield "", history, avatar_html(True)
         speak_async(reply)
+        time.sleep(estimate_speech_seconds(reply))
+        yield "", history, avatar_html(False)
 
     except Exception as e:
         print("OLLAMA ERROR:", str(e))
@@ -215,14 +226,15 @@ def voice_send(audio_data, history):
 
     # If transcription failed or returned an error tag, show message but don't send to AI
     if not transcribed or transcribed.startswith("["):
-        return transcribed, history, avatar_html(False)
+        yield transcribed, history, avatar_html(False)
+        return
 
     # For mic input, use non-streaming path for simplicity
     user_msg = transcribed.strip()
     try:
         messages = build_messages(SYSTEM_PROMPT, user_msg, n=5)
         response = ollama.chat(
-            model="llama3.2:3b",
+            model=MODEL_NAME,
             messages=messages,
         )
         if hasattr(response, "message"):
@@ -232,7 +244,6 @@ def voice_send(audio_data, history):
         else:
             reply = str(response)
         reply = clean_reply(reply)
-        speak_async(reply)
     except Exception as e:
         print("OLLAMA ERROR:", str(e))
         reply = f"Error connecting to Ollama: {str(e)}"
@@ -246,7 +257,12 @@ def voice_send(audio_data, history):
         {"role": "user", "content": user_msg},
         {"role": "assistant", "content": reply},
     ]
-    return transcribed, history, avatar_html(False)
+
+    # Voice input also updates the avatar only during actual TTS playback.
+    yield transcribed, history, avatar_html(True)
+    speak_async(reply)
+    time.sleep(estimate_speech_seconds(reply))
+    yield transcribed, history, avatar_html(False)
 
 # ===================== CUSTOM CSS =====================
 custom_css = """
@@ -481,7 +497,7 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
     # ── Footer ────────────────────────────────────────────────
     gr.Markdown("""
     <div style="text-align:center; color:#475569; font-size:0.75rem; margin-top:16px;">
-    Powered by Ollama · llama3.2:3b · Edge-TTS Voice · JSON Memory · SpeechRecognition Mic
+    Powered by Ollama · llama3.2:3b · Edge-TTS Voice · Animated Pixel Avatar · JSON Memory
     </div>
     """)
 
