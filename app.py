@@ -17,19 +17,21 @@ from backend import (
     clean_reply,
     load_identity,
     load_knowledge_base,
+    load_personality_style,
     build_system_prompt,
     build_messages,
 )
 
-print("Adarsh AI Clone v9.5 - Mic + Knowledge Base")
+print("Adarsh AI Clone v9.6 - llama3.2:3b + Personality Engine")
 
-# ===================== IDENTITY + KNOWLEDGE =====================
+# ===================== IDENTITY + KNOWLEDGE + PERSONALITY =====================
 _identity = load_identity("identity.json")
 _knowledge = load_knowledge_base("knowledge_base.json")
+_personality = load_personality_style("personality_style.json")
 
 if _identity:
-    SYSTEM_PROMPT = build_system_prompt(_identity) + _knowledge
-    print("Identity + Knowledge Base loaded.")
+    SYSTEM_PROMPT = build_system_prompt(_identity) + _knowledge + _personality
+    print("Identity + Knowledge Base + Personality Style loaded.")
 else:
     SYSTEM_PROMPT = """You are Adarsh Singh, a CSE student at Manipal University Jaipur.
 
@@ -112,7 +114,7 @@ def chat_with_clone(message, history):
         messages = build_messages(SYSTEM_PROMPT, message.strip(), n=5)
 
         response = ollama.chat(
-            model="llama3.2:1b",
+            model="llama3.2:3b",
             messages=messages
         )
 
@@ -316,7 +318,7 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
     # ── Footer ──────────────────────────────────────────────
     gr.Markdown("""
 <div style="text-align:center; color:#475569; font-size:0.75rem; margin-top:16px;">
-Powered by Ollama · llama3.2:1b · gTTS Voice · JSON Memory · SpeechRecognition Mic
+Powered by Ollama · llama3.2:3b · gTTS Voice · JSON Memory · SpeechRecognition Mic
 </div>
 """)
 

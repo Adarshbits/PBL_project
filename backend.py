@@ -134,6 +134,63 @@ def load_knowledge_base(kb_file: str = "knowledge_base.json") -> str:
         return ""
 
 
+def load_personality_style(style_file: str = "personality_style.json") -> str:
+    """
+    Load personality_style.json and format it into prompt instructions.
+    Teaches the LLM Adarsh's natural speech patterns, banned corporate AI phrases,
+    and tone rules.
+    """
+    if not os.path.exists(style_file):
+        return ""
+    try:
+        with open(style_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        lines = ["\n--- HOW ADARSH TALKS (STRICT PERSONALITY & TONE) ---"]
+
+        # Banned phrases
+        do_not_say = data.get("do_not_say", [])
+        if do_not_say:
+            lines.append("\nBANNED PHRASES (NEVER say these, they sound like a generic AI bot):")
+            for phrase in do_not_say:
+                lines.append(f"  - Do NOT say: \"{phrase}\"")
+
+        # Tone rules
+        tone_rules = data.get("tone_rules", [])
+        if tone_rules:
+            lines.append("\nTONE & CONVERSATION RULES:")
+            for rule in tone_rules:
+                lines.append(f"  - {rule}")
+
+        # Speech patterns
+        patterns = data.get("speech_patterns", {})
+        if patterns:
+            starters = ", ".join(f'"{s}"' for s in patterns.get("sentence_starters", []))
+            fillers = ", ".join(f'"{f}"' for f in patterns.get("filler_words", []))
+            agree = ", ".join(f'"{a}"' for a in patterns.get("how_to_agree", []))
+            lines.append(f"\nNATURAL SPEECH HABITS:")
+            if starters:
+                lines.append(f"  - Natural starters: {starters}")
+            if fillers:
+                lines.append(f"  - Casual filler words: {fillers}")
+            if agree:
+                lines.append(f"  - How to agree: {agree}")
+
+        # Example responses (few-shot learning)
+        examples = data.get("example_responses", {})
+        if examples:
+            lines.append("\nFEW-SHOT EXAMPLES OF HOW ADARSH ANSWERS:")
+            for q, a in examples.items():
+                lines.append(f"  Q: \"{q}\"")
+                lines.append(f"  Adarsh: \"{a}\"")
+
+        lines.append("--- END PERSONALITY INSTRUCTIONS ---")
+        return "\n".join(lines)
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"[backend] Personality style load error: {e}")
+        return ""
+
+
 def build_system_prompt(identity: dict) -> str:
     """Build a system prompt string dynamically from identity.json data."""
     if not identity:
