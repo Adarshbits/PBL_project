@@ -7,6 +7,8 @@ All memory, voice, identity logic lives in backend.py.
 import gradio as gr
 import numpy as np
 import io
+import os
+import base64
 import ollama
 
 # Import everything from backend
@@ -55,17 +57,45 @@ STRICT RULES:
     print("WARNING: identity.json not found -- using hardcoded fallback")
 
 # ===================== AVATAR (CHARACTER ZONE) =====================
-IDLE_GIF = "avatar_idle.gif"
-TALKING_GIF = "avatar_talking.gif"
+# Embed the GIFs directly as base64 data URIs instead of relying on
+# Gradio's local-file-serving route. That route's URL format has changed
+# across Gradio versions (file= vs gradio_api/file=), which is fragile —
+# embedding the image bytes directly in the HTML sidesteps that entirely
+# and works the same on every Gradio version.
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+IDLE_GIF_PATH = os.path.join(BASE_DIR, "avatar_idle.gif")
+TALKING_GIF_PATH = os.path.join(BASE_DIR, "avatar_talking.gif")
+
+
+def load_gif_as_data_uri(path):
+    try:
+        with open(path, "rb") as f:
+            data = f.read()
+        b64 = base64.b64encode(data).decode("utf-8")
+        return f"data:image/gif;base64,{b64}"
+    except FileNotFoundError:
+        print(f"WARNING: avatar file not found at {path} -- using emoji fallback")
+        return None
+
+
+IDLE_GIF_DATA = load_gif_as_data_uri(IDLE_GIF_PATH)
+TALKING_GIF_DATA = load_gif_as_data_uri(TALKING_GIF_PATH)
 
 
 def avatar_html(speaking: bool) -> str:
     """Returns the Character Zone markup, pointing at the talking or idle GIF."""
-    src = TALKING_GIF if speaking else IDLE_GIF
+    data_uri = TALKING_GIF_DATA if speaking else IDLE_GIF_DATA
     status = "Speaking..." if speaking else "Online — llama3.2:3b"
+
+    if data_uri:
+        avatar_inner = f'<img src="{data_uri}" class="avatar-sprite" alt="Adarsh AI avatar" />'
+    else:
+        # Fallback if the GIF files are missing, so the app never crashes
+        avatar_inner = '<div class="avatar-sprite avatar-fallback">🤖</div>'
+
     return f"""
     <div id="character-zone">
-        <img src="file={src}" class="avatar-sprite" alt="Adarsh AI avatar" />
+        {avatar_inner}
         <div class="clone-name">Adarsh AI</div>
         <div class="status-pill">● {status}</div>
     </div>
@@ -291,6 +321,12 @@ body, .gradio-container {
     z-index: 1;
     object-fit: cover;
 }
+#character-zone .avatar-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
 #character-zone .clone-name {
     margin-top: 16px;
     font-weight: 600;
@@ -473,4 +509,4 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
 
 # ===================== RUN =====================
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", css=custom_css, allowed_paths=["."])
+    demo.launch(server_name="127.0.0.1", css=custom_css)
