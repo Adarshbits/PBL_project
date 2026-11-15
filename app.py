@@ -1,105 +1,175 @@
 """
-app.py — Adarsh AI Clone v9.7
-Main entry point. Chat UI + voice input mic.
+app.py — Adarsh AI Clone v10.7
+Main entry point. Chat UI + voice input mic + guaranteed idle-to-talking avatar animation.
 All memory, voice, identity logic lives in backend.py.
 """
+
+import os
+import sys
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Prepend project root to PATH so bundled ffmpeg.exe and ffprobe.exe are found by pydub & Gradio
+if BASE_DIR not in os.environ.get("PATH", ""):
+    os.environ["PATH"] = BASE_DIR + os.pathsep + os.environ.get("PATH", "")
+
+# Configure pydub explicitly with bundled ffmpeg/ffprobe
+try:
+    from pydub import AudioSegment
+    ffmpeg_bin = os.path.join(BASE_DIR, "ffmpeg.exe")
+    ffprobe_bin = os.path.join(BASE_DIR, "ffprobe.exe")
+    if os.path.exists(ffmpeg_bin):
+        AudioSegment.converter = ffmpeg_bin
+    if os.path.exists(ffprobe_bin):
+        AudioSegment.ffprobe = ffprobe_bin
+except Exception:
+    pass
 
 import gradio as gr
 import numpy as np
 import io
-import os
 import base64
 import time
+import re
+import threading
 import ollama
 
 # Import everything from backend
 from backend import (
     load_history,
+    get_initial_history,
     save_history,
     speak_async,
+    stop_speaking,
+    is_speaking,
     clean_reply,
     load_identity,
     load_knowledge_base,
     load_personality_style,
     build_system_prompt,
     build_messages,
+    check_ollama,
 )
 
 MODEL_NAME = "llama3.2:3b"
-print(f"Adarsh AI Clone v10.1 - {MODEL_NAME} + Personality + Edge-TTS + Animated Avatar")
+print(f"Adarsh AI Clone v10.7 - {MODEL_NAME} + Guaranteed Animated Avatar Transition")
+
+# Startup Ollama Diagnostic Check
+_ollama_status = check_ollama(MODEL_NAME)
+if _ollama_status["ok"]:
+    print(f"[Ollama Status] {_ollama_status['message']}")
+else:
+    print(f"[Ollama Warning] {_ollama_status['message']}")
 
 # ===================== IDENTITY + KNOWLEDGE + PERSONALITY =====================
-_identity = load_identity("identity.json")
-_knowledge = load_knowledge_base("knowledge_base.json")
-_personality = load_personality_style("personality_style.json")
+_identity = load_identity(os.path.join(BASE_DIR, "identity.json"))
+_knowledge = load_knowledge_base(os.path.join(BASE_DIR, "knowledge_base.json"))
+_personality = load_personality_style(os.path.join(BASE_DIR, "personality_style.json"))
 
 if _identity:
     SYSTEM_PROMPT = build_system_prompt(_identity) + _knowledge + _personality
     print("Identity + Knowledge Base + Personality Style loaded.")
 else:
-    SYSTEM_PROMPT = """You are Adarsh Singh, a CSE student at Manipal University Jaipur.
-Facts about you:
+    SYSTEM_PROMPT = """You are Adarsh Singh, a real 3rd Year B.Tech CSE Core student at Manipal University Jaipur, talking with someone.
+
+YOUR IDENTITY:
 - Name: Adarsh Singh
-- Registration Number: 2427030325
-- Course: CSE, 5th Semester, 3rd Year
+- Reg No: 2427030325
+- Course: B.Tech CSE Core, 5th Semester, 3rd Year
 - University: Manipal University Jaipur
-- Your guide/supervisor: Mr. Virendra Mehgwal (he is YOUR professor who guides YOU — you are HIS student, not the other way around)
-- Project: AI Digital Twin using Ollama, Gradio, gTTS, JSON memory
+- Project guide: Dr. Virendra Mehgwal (he is your professor and supervisor)
+- PBL-2 Project: AI Digital Twin using Ollama, Gradio, Edge-TTS and JSON memory
+- Hobbies: Judo, Volleyball, Football, Listening to music
+- Skills: Python, AI/ML basics, debugging models
 
-Your hobbies (ONLY these):
-- Judo, volleyball, football, listening to music
-
-Your skills: Python, AI/ML basics, debugging models
-
-STRICT RULES:
-- Answer ONLY what is asked right now
-- Mr. Virendra Mehgwal is your guide, you are his student
-- Never over-explain
-- English only"""
+HOW YOU BEHAVE:
+You are a smart, curious, knowledgeable college student. Talk naturally and casually. You can discuss any topic confidently.
+Never say "As an AI language model", "Certainly!", or sound robotic. Write in natural flowing sentences."""
     print("WARNING: identity.json not found -- using hardcoded fallback")
 
 # ===================== AVATAR (CHARACTER ZONE) =====================
-# Embed the GIFs directly as base64 data URIs instead of relying on
-# Gradio's local-file-serving route. That route's URL format has changed
-# across Gradio versions (file= vs gradio_api/file=), which is fragile —
-# embedding the image bytes directly in the HTML sidesteps that entirely
-# and works the same on every Gradio version.
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-IDLE_GIF_PATH = os.path.join(BASE_DIR, "avatar_idle.gif")
-TALKING_GIF_PATH = os.path.join(BASE_DIR, "avatar_talking.gif")
+IDLE_AVATAR_PATH = os.path.join(BASE_DIR, "new_avatar_idle.png")
+if not os.path.exists(IDLE_AVATAR_PATH):
+    IDLE_AVATAR_PATH = os.path.join(BASE_DIR, "avatar_idle.png")
+
+TALKING_AVATAR_PATH = os.path.join(BASE_DIR, "new_avatar_talking.png")
+if not os.path.exists(TALKING_AVATAR_PATH):
+    TALKING_AVATAR_PATH = os.path.join(BASE_DIR, "avatar_talking.png")
 
 
-def load_gif_as_data_uri(path):
+def load_image_as_data_uri(path):
     try:
+        if not path or not os.path.exists(path):
+            return None
+        ext = os.path.splitext(path)[1].lower().lstrip(".")
+        if ext == "png":
+            mime = "image/png"
+        elif ext in ("jpg", "jpeg"):
+            mime = "image/jpeg"
+        elif ext == "webp":
+            mime = "image/webp"
+        else:
+            mime = "image/gif"
         with open(path, "rb") as f:
             data = f.read()
         b64 = base64.b64encode(data).decode("utf-8")
-        return f"data:image/gif;base64,{b64}"
-    except FileNotFoundError:
-        print(f"WARNING: avatar file not found at {path} -- using emoji fallback")
+        return f"data:{mime};base64,{b64}"
+    except Exception as e:
+        print(f"WARNING: avatar load error at {path}: {e}")
         return None
 
 
-IDLE_GIF_DATA = load_gif_as_data_uri(IDLE_GIF_PATH)
-TALKING_GIF_DATA = load_gif_as_data_uri(TALKING_GIF_PATH)
+IDLE_AVATAR_DATA = load_image_as_data_uri(IDLE_AVATAR_PATH)
+TALKING_AVATAR_DATA = load_image_as_data_uri(TALKING_AVATAR_PATH)
 
 
 def avatar_html(speaking: bool) -> str:
-    """Returns the Character Zone markup, pointing at the talking or idle GIF."""
-    data_uri = TALKING_GIF_DATA if speaking else IDLE_GIF_DATA
+    """
+    Renders Character Zone markup.
+    Guaranteed transition:
+      - When speaking is True: renders active talking container with mouth flap keyframe animation
+        and glowing 'Speaking...' status pill.
+      - When speaking is False: renders idle avatar with mouth closed and 'Online' badge.
+    """
     status = "Speaking..." if speaking else f"Online — {MODEL_NAME}"
+    speak_class = " speaking" if speaking else ""
 
-    if data_uri:
-        avatar_inner = f'<img src="{data_uri}" class="avatar-sprite" alt="Adarsh AI avatar" />'
+    if IDLE_AVATAR_DATA and TALKING_AVATAR_DATA:
+        if speaking:
+            avatar_inner = f"""
+            <div class="avatar-container speaking">
+                <img src="{IDLE_AVATAR_DATA}" class="avatar-layer avatar-idle-img" alt="Adarsh AI idle" />
+                <img src="{TALKING_AVATAR_DATA}" class="avatar-layer avatar-talking-img" alt="Adarsh AI talking" />
+            </div>
+            <style>
+              .avatar-container.speaking .avatar-talking-img {{
+                  animation: mouth-flap 0.30s steps(1, end) infinite !important;
+              }}
+              @keyframes mouth-flap {{
+                  0%, 48% {{ opacity: 0; }}
+                  50%, 98% {{ opacity: 1; }}
+              }}
+            </style>
+            """
+        else:
+            avatar_inner = f"""
+            <div class="avatar-container">
+                <img src="{IDLE_AVATAR_DATA}" class="avatar-layer avatar-idle-img" alt="Adarsh AI idle" />
+            </div>
+            """
+    elif IDLE_AVATAR_DATA:
+        avatar_inner = f"""
+        <div class="avatar-container{speak_class}">
+            <img src="{IDLE_AVATAR_DATA}" class="avatar-layer" alt="Adarsh AI avatar" />
+        </div>
+        """
     else:
-        # Fallback if the GIF files are missing, so the app never crashes
-        avatar_inner = '<div class="avatar-sprite avatar-fallback">🤖</div>'
+        avatar_inner = '<div class="avatar-container"><div class="avatar-fallback">🤖</div></div>'
 
     return f"""
     <div id="character-zone">
         {avatar_inner}
         <div class="clone-name">Adarsh AI</div>
-        <div class="status-pill">● {status}</div>
+        <div class="status-pill{speak_class}">● {status}</div>
     </div>
     """
 
@@ -108,60 +178,87 @@ def avatar_html(speaking: bool) -> str:
 def transcribe_audio(audio_data):
     """
     Convert recorded mic audio to text using Google Speech Recognition.
-    audio_data is a (sample_rate, numpy_array) tuple from gr.Audio.
-    Returns transcribed text string or empty string on failure.
     """
     if audio_data is None:
         return ""
     try:
         import speech_recognition as sr
         import scipy.io.wavfile as wav_io
-
-        sample_rate, audio_array = audio_data
-        # Ensure it's 16-bit PCM mono
-        if audio_array.ndim > 1:
-            audio_array = audio_array[:, 0]  # take left channel if stereo
-        if audio_array.dtype != np.int16:
-            audio_array = (audio_array * 32767).clip(-32768, 32767).astype(np.int16)
-
-        # Write to in-memory WAV buffer
-        wav_buffer = io.BytesIO()
-        wav_io.write(wav_buffer, sample_rate, audio_array)
-        wav_buffer.seek(0)
+        from pydub import AudioSegment
 
         recognizer = sr.Recognizer()
-        with sr.AudioFile(wav_buffer) as source:
-            audio = recognizer.record(source)
+
+        if isinstance(audio_data, tuple):
+            sample_rate, audio_array = audio_data
+            if len(audio_array) == 0:
+                return ""
+            if audio_array.ndim > 1:
+                audio_array = audio_array[:, 0]  # mono
+
+            if audio_array.dtype == np.int32:
+                audio_array = (audio_array >> 16).astype(np.int16)
+            elif np.issubdtype(audio_array.dtype, np.floating):
+                audio_array = (np.clip(audio_array, -1.0, 1.0) * 32767).astype(np.int16)
+            elif audio_array.dtype != np.int16:
+                audio_array = audio_array.astype(np.int16)
+
+            max_amp = int(np.max(np.abs(audio_array)))
+            if 0 < max_amp < 6000:
+                gain = min(4.0, 20000.0 / max_amp)
+                audio_array = np.clip(audio_array.astype(np.float32) * gain, -32768, 32767).astype(np.int16)
+
+            wav_buffer = io.BytesIO()
+            wav_io.write(wav_buffer, sample_rate, audio_array)
+            wav_buffer.seek(0)
+            with sr.AudioFile(wav_buffer) as source:
+                audio = recognizer.record(source)
+
+        elif isinstance(audio_data, dict) and "path" in audio_data:
+            path = audio_data["path"]
+            if not os.path.exists(path):
+                return ""
+            seg = AudioSegment.from_file(path)
+            wav_buffer = io.BytesIO()
+            seg.export(wav_buffer, format="wav")
+            wav_buffer.seek(0)
+            with sr.AudioFile(wav_buffer) as source:
+                audio = recognizer.record(source)
+
+        elif isinstance(audio_data, str) and os.path.exists(audio_data):
+            seg = AudioSegment.from_file(audio_data)
+            wav_buffer = io.BytesIO()
+            seg.export(wav_buffer, format="wav")
+            wav_buffer.seek(0)
+            with sr.AudioFile(wav_buffer) as source:
+                audio = recognizer.record(source)
+
+        else:
+            return ""
+
         text = recognizer.recognize_google(audio)
-        return text
-    except ImportError:
-        return "[Install SpeechRecognition: pip install SpeechRecognition scipy]"
+        return text.strip()
     except Exception as e:
         name = type(e).__name__
+        err_msg = str(e)
         if "UnknownValue" in name:
-            return "[Could not understand audio — speak clearly and try again]"
-        if "Request" in name:
-            return "[No internet for speech recognition — check your connection]"
-        return f"[Transcription error: {e}]"
-
-def estimate_speech_seconds(text: str) -> float:
-    """Approximate Edge-TTS playback time so the avatar stays animated while speaking."""
-    words = max(1, len(text.split()))
-    return min(45.0, max(2.0, words / 2.4 + 0.8))
+            return "[Could not understand audio — please speak clearly and try again]"
+        if "Request" in name or "WinError 623" in err_msg or "Failed to establish" in err_msg:
+            return "[Microphone STT requires internet for Google Speech API — please check connection or type in chat]"
+        return f"[Transcription note: {e}]"
 
 
-# ===================== MAIN CHAT (STREAMING) =====================
+# ===================== MAIN CHAT (STREAMING + GUARANTEED AVATAR SHIFT) =====================
 def chat_with_clone(message, history):
     """
     Streaming chat function — text appears word-by-word as Ollama generates.
-    Voice plays AFTER the full reply is ready.
-    Yields (cleared_input, updated_history, avatar_state) on each chunk.
+    Avatar state is 100% synchronized with native SAPI5 playback status:
+    transitions to talking when playback starts, remains talking for the full
+    duration of speech, and returns to idle as soon as speech finishes or is cancelled.
     """
     if not message or not message.strip():
         yield "", history, avatar_html(False)
         return
 
-    # Add user message to chat immediately
     user_msg = message.strip()
     history = history + [
         {"role": "user", "content": user_msg},
@@ -169,10 +266,8 @@ def chat_with_clone(message, history):
     ]
 
     try:
-        # Build proper multi-turn messages with role-based history
         messages = build_messages(SYSTEM_PROMPT, user_msg, n=5)
 
-        # Stream response — text appears word by word
         raw_reply = ""
         stream = ollama.chat(
             model=MODEL_NAME,
@@ -181,7 +276,6 @@ def chat_with_clone(message, history):
         )
 
         for chunk in stream:
-            # Handle both object and dict SDK styles
             if hasattr(chunk, "message"):
                 token = chunk.message.content or ""
             elif isinstance(chunk, dict):
@@ -189,19 +283,27 @@ def chat_with_clone(message, history):
             else:
                 token = ""
             raw_reply += token
-            # Update the last assistant message with partial text
             history[-1]["content"] = raw_reply
             yield "", history, avatar_html(False)
 
-        # Final cleaning after full response is assembled
         reply = clean_reply(raw_reply)
         history[-1]["content"] = reply
 
-        # The avatar speaks only while audio is actually playing.
-        # It stays idle while the text is being generated.
-        yield "", history, avatar_html(True)
+        # 1. Trigger voice playback asynchronously via native SAPI5
         speak_async(reply)
-        time.sleep(estimate_speech_seconds(reply))
+
+        # 2. Wait briefly for playback to actually start (latches in ~15-50ms)
+        t_wait = time.time()
+        while not is_speaking() and time.time() - t_wait < 0.35:
+            time.sleep(0.01)
+
+        # 3. Synchronize avatar strictly with active SAPI5 playback state
+        if is_speaking():
+            yield "", history, avatar_html(True)
+            while is_speaking():
+                time.sleep(0.04)
+
+        # 4. Return to idle stage once playback genuinely ends or is stopped
         yield "", history, avatar_html(False)
 
     except Exception as e:
@@ -209,60 +311,91 @@ def chat_with_clone(message, history):
         reply = f"Error connecting to Ollama: {str(e)}"
         history[-1]["content"] = reply
         yield "", history, avatar_html(False)
+        return
 
-    # Save to persistent memory
-    all_history = load_history(1000)
-    all_history.append([user_msg, history[-1]["content"]])
-    save_history(all_history)
+    final_reply = history[-1]["content"].strip()
+    if final_reply and not final_reply.startswith("Error connecting to Ollama"):
+        all_history = load_history(1000)
+        all_history.append([user_msg, final_reply])
+        save_history(all_history)
 
 
 def voice_send(audio_data, history):
     """
-    Transcribe mic audio -> send to chat -> return updated history + transcribed text.
-    Non-streaming version for mic input (streaming not needed here since
-    the user already waited for transcription).
+    Transcribe mic audio -> stream reply -> synchronized avatar talking -> idle reset.
     """
+    if audio_data is None:
+        yield "", history, avatar_html(False)
+        return
+
     transcribed = transcribe_audio(audio_data)
 
-    # If transcription failed or returned an error tag, show message but don't send to AI
     if not transcribed or transcribed.startswith("["):
         yield transcribed, history, avatar_html(False)
         return
 
-    # For mic input, use non-streaming path for simplicity
     user_msg = transcribed.strip()
-    try:
-        messages = build_messages(SYSTEM_PROMPT, user_msg, n=5)
-        response = ollama.chat(
-            model=MODEL_NAME,
-            messages=messages,
-        )
-        if hasattr(response, "message"):
-            reply = response.message.content
-        elif isinstance(response, dict):
-            reply = response.get("message", {}).get("content", "")
-        else:
-            reply = str(response)
-        reply = clean_reply(reply)
-    except Exception as e:
-        print("OLLAMA ERROR:", str(e))
-        reply = f"Error connecting to Ollama: {str(e)}"
-
-    # Save to persistent memory
-    all_history = load_history(1000)
-    all_history.append([user_msg, reply])
-    save_history(all_history)
 
     history = history + [
         {"role": "user", "content": user_msg},
-        {"role": "assistant", "content": reply},
+        {"role": "assistant", "content": ""},
     ]
-
-    # Voice input also updates the avatar only during actual TTS playback.
-    yield transcribed, history, avatar_html(True)
-    speak_async(reply)
-    time.sleep(estimate_speech_seconds(reply))
     yield transcribed, history, avatar_html(False)
+
+    try:
+        messages = build_messages(SYSTEM_PROMPT, user_msg, n=5)
+
+        raw_reply = ""
+        stream = ollama.chat(
+            model=MODEL_NAME,
+            messages=messages,
+            stream=True,
+        )
+
+        for chunk in stream:
+            if hasattr(chunk, "message"):
+                token = chunk.message.content or ""
+            elif isinstance(chunk, dict):
+                token = chunk.get("message", {}).get("content", "")
+            else:
+                token = ""
+            raw_reply += token
+            history[-1]["content"] = raw_reply
+            yield transcribed, history, avatar_html(False)
+
+        reply = clean_reply(raw_reply)
+        history[-1]["content"] = reply
+
+        # 1. Trigger voice playback asynchronously via native SAPI5
+        speak_async(reply)
+
+        # 2. Wait briefly for playback to actually start (latches in ~15-50ms)
+        t_wait = time.time()
+        while not is_speaking() and time.time() - t_wait < 0.35:
+            time.sleep(0.01)
+
+        # 3. Synchronize avatar strictly with active SAPI5 playback state
+        if is_speaking():
+            yield transcribed, history, avatar_html(True)
+            while is_speaking():
+                time.sleep(0.04)
+
+        # 4. Return to idle stage once playback genuinely ends or is stopped
+        yield transcribed, history, avatar_html(False)
+
+    except Exception as e:
+        print("OLLAMA ERROR:", str(e))
+        reply = f"Error connecting to Ollama: {str(e)}"
+        history[-1]["content"] = reply
+        yield transcribed, history, avatar_html(False)
+        return
+
+    final_reply = history[-1]["content"].strip()
+    if final_reply and not final_reply.startswith("Error connecting to Ollama"):
+        all_history = load_history(1000)
+        all_history.append([user_msg, final_reply])
+        save_history(all_history)
+
 
 # ===================== CUSTOM CSS =====================
 custom_css = """
@@ -327,21 +460,60 @@ body, .gradio-container {
     0%, 100% { transform: scale(0.9); opacity: 0.55; }
     50% { transform: scale(1.15); opacity: 1; }
 }
-#character-zone .avatar-sprite {
-    width: 160px; height: 160px;
-    image-rendering: pixelated;
+
+.avatar-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
+    overflow: hidden;
     background: var(--bg-panel);
     border: 2px solid var(--accent);
     box-shadow: 0 0 34px var(--accent-glow);
     z-index: 1;
-    object-fit: cover;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-#character-zone .avatar-fallback {
+.avatar-container.speaking {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 38px rgba(34, 211, 238, 0.55);
+    animation: avatar-speak-pulse 1.3s ease-in-out infinite alternate;
+}
+@keyframes avatar-speak-pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.035); }
+}
+
+.avatar-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.avatar-idle-img {
+    z-index: 1;
+}
+.avatar-talking-img {
+    z-index: 2;
+    opacity: 0;
+}
+.avatar-container.speaking .avatar-talking-img {
+    animation: mouth-flap 0.30s steps(1, end) infinite;
+}
+@keyframes mouth-flap {
+    0%, 48% { opacity: 0; }
+    50%, 98% { opacity: 1; }
+}
+
+.avatar-fallback {
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 3rem;
+    width: 100%;
+    height: 100%;
 }
 #character-zone .clone-name {
     margin-top: 16px;
@@ -358,6 +530,12 @@ body, .gradio-container {
     border-radius: 999px;
     z-index: 1;
     background: rgba(34,211,238,0.08);
+    transition: all 0.2s ease;
+}
+#character-zone .status-pill.speaking {
+    color: #4ade80;
+    border-color: #4ade80;
+    background: rgba(74, 222, 128, 0.12);
 }
 
 /* ---------- Chat ---------- */
@@ -413,6 +591,21 @@ button.primary:hover {
     box-shadow: 0 4px 15px rgba(99,102,241,0.4) !important;
 }
 
+button.stop, .stop-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    color: white !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+button.stop:hover, .stop-btn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4) !important;
+    background: linear-gradient(135deg, #f87171, #ef4444) !important;
+}
+
 .mic-section {
     background: var(--bg-panel-2) !important;
     border: 1px solid var(--border-soft) !important;
@@ -445,13 +638,10 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
         # ── Chat area (right) ───────────────────────────────
         with gr.Column(scale=2):
             chatbot = gr.Chatbot(
-                value=[],
+                value=get_initial_history(10),
                 height=420,
                 show_label=False,
-                avatar_images=(
-                    None,
-                    "https://api.dicebear.com/7.x/initials/svg?seed=AS&backgroundColor=6366f1"
-                ),
+                avatar_images=(None, IDLE_AVATAR_PATH if os.path.exists(IDLE_AVATAR_PATH) else None),
             )
 
             # ── Text input row ───────────────────────────────
@@ -460,9 +650,10 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
                     placeholder="Type your message here...",
                     show_label=False,
                     lines=1,
-                    scale=9,
+                    scale=8,
                 )
                 send_btn = gr.Button("Send", variant="primary", scale=1)
+                stop_btn = gr.Button("⏹ Stop", variant="stop", scale=1, elem_classes=["stop-btn"])
 
             # ── Quick example buttons ─────────────────────────
             gr.Examples(
@@ -479,13 +670,13 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
     # ── Voice / Mic input section ───────────────────────────
     gr.Markdown("---\n### Voice Input (Mic)")
     gr.Markdown(
-        "_Record your question below. It will be transcribed and sent automatically._",
+        "_Click the microphone icon to record your question, then click stop (■). It will be transcribed and answered automatically._",
     )
     with gr.Row():
         mic_input = gr.Audio(
             sources=["microphone"],
             type="numpy",
-            label="Hold to Record",
+            label="Microphone (Record / Stop)",
         )
         transcribed_box = gr.Textbox(
             label="What I heard:",
@@ -516,11 +707,22 @@ with gr.Blocks(title="Adarsh AI Clone") as demo:
         outputs=[msg_box, chatbot, avatar_box],
     )
 
-    # Voice send — fires when audio recording is submitted/changed
+    # Voice send — fires automatically when audio recording is submitted/changed
     mic_input.change(
         fn=voice_send,
         inputs=[mic_input, chatbot],
         outputs=[transcribed_box, chatbot, avatar_box],
+    )
+
+    # Stop button — stops audio playback immediately and resets avatar
+    def stop_speaking_handler():
+        stop_speaking()
+        return avatar_html(False)
+
+    stop_btn.click(
+        fn=stop_speaking_handler,
+        inputs=None,
+        outputs=[avatar_box],
     )
 
 # ===================== RUN =====================

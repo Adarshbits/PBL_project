@@ -62,7 +62,11 @@ ul {
 img {
     border-radius: 12px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.6);
-    margin-top: 20px;
+    margin-top: 15px;
+    max-height: 52vh;
+    max-width: 80%;
+    width: auto;
+    object-fit: contain;
 }
 
 /* Navigation */
@@ -92,9 +96,12 @@ button {
 <!-- Slide 1 -->
 <div class="slide active">
 <h1>AI Human Clone</h1>
-<p>Adarsh Singh</p>
-<p>CSE 4th Sem</p>
-<p>Guide: Dr. Virendra Meghwal</p>
+<p style="font-size: 1.3rem; font-weight: bold; margin-bottom: 4px;">Adarsh Singh</p>
+<p style="color: #38bdf8; font-size: 1.1rem; margin-top: 0;">Registration No: 2427030325</p>
+<p>B.Tech CSE Core (5th Sem, 3rd Year)</p>
+<p>Department of Computer Science & Engineering</p>
+<p>Manipal University Jaipur</p>
+<p style="margin-top: 15px; font-weight: bold;">Project Guide: Dr. Virendra Mehgwal</p>
 </div>
 
 <!-- Slide 2 -->
@@ -125,12 +132,13 @@ button {
 <div class="slide">
 <h2>Technology</h2>
 <ul>
-<li>Python – used for backend logic</li>
-<li>Ollama – runs the LLM locally</li>
-<li>Gradio – creates user interface</li>
-<li>gTTS – converts text into voice</li>
-<li>JSON – stores chat history and memory</li>
-<li>Threading – used for smooth voice execution</li>
+<li>Python – used for backend logic and orchestration</li>
+<li>Ollama – runs the local LLM (llama3.2:3b)</li>
+<li>Gradio – creates the responsive dark cyberpunk UI</li>
+<li>Edge-TTS & SAPI5 – converts text into voice with offline fallback</li>
+<li>SpeechRecognition – converts microphone voice input to text</li>
+<li>JSON – stores conversation memory and identity knowledge</li>
+<li>Threading & Subprocess – ensures smooth, cancellable voice execution</li>
 </ul>
 </div>
 
@@ -159,14 +167,14 @@ button {
 <div class="slide">
 <h2>Working</h2>
 <ul>
-<li>User enters input through the interface</li>
-<li>System builds a prompt using personality and previous chats</li>
-<li>Prompt is sent to the LLM model</li>
-<li>Model generates a response based on context</li>
-<li>Response is cleaned and formatted</li>
-<li>Voice output is generated using gTTS</li>
-<li>Final response is displayed to user</li>
-<li>Conversation is stored in memory for future use</li>
+<li>User enters input through text or microphone voice interface</li>
+<li>System builds a prompt using personality, identity, and previous chats</li>
+<li>Prompt is sent to the Ollama LLM (llama3.2:3b)</li>
+<li>Model streams responses word-by-word with natural student persona</li>
+<li>Response is cleaned of artifacts, formatting, and prefixes</li>
+<li>Voice output is spoken using Edge-TTS with offline SAPI5 fallback</li>
+<li>Animated pixel avatar mirrors speech state in real time</li>
+<li>Conversation is safely persisted in JSON memory</li>
 </ul>
 </div>
 
@@ -174,12 +182,13 @@ button {
 <div class="slide">
 <h2>Key Features</h2>
 <ul>
-<li>AI Digital Twin with personalized responses</li>
-<li>Memory system using JSON storage</li>
-<li>Voice output integration</li>
-<li>Local AI execution (no internet required)</li>
-<li>Fast response generation</li>
-<li>Clean and simple user interface</li>
+<li>AI Digital Twin with personalized student persona</li>
+<li>Multi-turn memory system using JSON storage</li>
+<li>Dual-engine voice synthesis (Edge-TTS + SAPI5 offline)</li>
+<li>Microphone speech-to-text input integration</li>
+<li>Interactive Stop button for instant speech cancellation</li>
+<li>Local AI execution with high privacy and low latency</li>
+<li>Polished dark cyberpunk interface with animated sprite avatar</li>
 </ul>
 </div>
 
@@ -187,11 +196,11 @@ button {
 <div class="slide">
 <h2>Challenges</h2>
 <ul>
-<li>Incorrect model version caused no responses</li>
-<li>Difficulty in extracting correct output from model</li>
-<li>UI was not displaying responses initially</li>
-<li>Handling GitHub push and merge conflicts</li>
-<li>Ensuring smooth voice playback</li>
+<li>Model version synchronization and context window sizing</li>
+<li>Handling Edge-TTS network/handshake restrictions gracefully</li>
+<li>Preventing UI thread freezing during audio playback</li>
+<li>Sanitizing chat history from error pollution and prefixes</li>
+<li>Coordinating avatar animation state with live audio playback</li>
 </ul>
 </div>
 
@@ -199,11 +208,11 @@ button {
 <div class="slide">
 <h2>Solutions</h2>
 <ul>
-<li>Used correct model version (llama3.2:1b)</li>
-<li>Improved response parsing logic</li>
-<li>Debugged UI integration step-by-step</li>
-<li>Used Git rebase to resolve conflicts</li>
-<li>Optimized prompt structure for better responses</li>
+<li>Configured llama3.2:3b with structured persona prompt injection</li>
+<li>Engineered dual-engine TTS (Edge-TTS with instant SAPI5 fallback)</li>
+<li>Decoupled audio into cancellable subprocess with non-blocking polling</li>
+<li>Implemented regex-based response cleaner and strict history validation</li>
+<li>Integrated base64 animated avatars synced with playback lifecycle</li>
 </ul>
 </div>
 
@@ -211,11 +220,11 @@ button {
 <div class="slide">
 <h2>Results</h2>
 <ul>
-<li>Successfully built AI Digital Twin system</li>
-<li>Responses are context-aware and personalized</li>
-<li>Memory system stores and retrieves past chats</li>
-<li>Voice output works smoothly</li>
-<li>System performs efficiently in local environment</li>
+<li>Successfully built Adarsh AI Clone Digital Twin system</li>
+<li>Responses are context-aware, personalized, and articulate</li>
+<li>Memory system seamlessly restores past exchanges on startup</li>
+<li>Voice output plays smoothly and cancels instantly on demand</li>
+<li>System runs completely locally with 100% offline fallback</li>
 </ul>
 </div>
 
@@ -223,18 +232,18 @@ button {
 <div class="slide">
 <h2>Project Output</h2>
 <p>Below is the working chatbot interface:</p>
-<img src="PBL2.png" style="width:60%; max-width:600px;">
+<img src="PBL2.png" alt="Adarsh AI Clone Interface" style="max-height:55vh; max-width:85%; width:auto;">
 </div>
 
 <!-- Slide 12 -->
 <div class="slide">
 <h2>Future Scope</h2>
 <ul>
-<li>Upgrade to larger models like llama3:8b</li>
-<li>Add speech-to-text input</li>
-<li>Deploy application on cloud</li>
-<li>Improve UI design and animations</li>
-<li>Add support for multiple users</li>
+<li>Upgrade to larger multi-modal models (e.g. LLaMA 3.3 / Vision)</li>
+<li>Add local offline Whisper model for microphone STT</li>
+<li>Real-time 3D facial animation and lip synchronization</li>
+<li>Deploy application on private cloud / intranet container</li>
+<li>Multi-agent collaborative twin interactions</li>
 </ul>
 </div>
 

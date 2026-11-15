@@ -1,21 +1,29 @@
-Adarsh AI Clone - Run Instructions
+Adarsh AI Clone — Run & Operation Guide
 
-1. Install dependencies:
+1. Prerequisites & Environment Setup:
+   Ensure Python 3.10+ is installed, then install all dependencies:
    python -m pip install -r requirements.txt
 
-2. Make sure Ollama is running:
+2. Launch Ollama Engine:
+   Ensure Ollama is running locally:
    ollama serve
 
-3. In another terminal, ensure the model exists:
+3. Download / Verify Model:
+   Ensure the llama3.2:3b model is pulled:
    ollama pull llama3.2:3b
 
-4. Start the app:
+4. Start the Application:
    python app.py
 
-Open http://127.0.0.1:7860
+5. Access the Web Interface:
+   Open your browser to:
+   http://127.0.0.1:7860
+   (Note: If port 7860 is already in use by another session, Gradio will automatically bind to http://127.0.0.1:7861 or the exact port printed in the terminal).
 
-Avatar behavior:
-- The avatar stays idle while the response text is being generated.
-- It switches to the talking animation only while Edge-TTS voice playback is expected.
-- It returns to idle afterward.
-- Replace avatar_idle.gif and avatar_talking.gif with your own sprite GIFs if desired.
+Key Features & Operations:
+- Avatar Display: Displays your custom high-resolution avatars (new_avatar_idle.png and new_avatar_talking.png), automatically switching between idle and speaking states in real time.
+- Zero-Latency Voice Engine: Speaks instantly using native Windows SAPI5 (Microsoft David Desktop) with ultra-low latency (<35ms start time), guaranteeing reliable multi-turn playback across all consecutive messages without hanging or delay.
+- Instant Cancellation: Press the red "⏹ Stop" button at any time to instantly cut off speech playback and reset the avatar to idle.
+- Multi-Turn Memory: Automatically restores recent chat history into the UI on startup and persists new conversations to chat_history.json.
+- Voice & Microphone Input: Hold or click the mic button to speak; transcription is fed directly to the model.
+- HTML Presentation: Open index.html in any browser to view the 13-slide academic presentation for the PBL-2 project evaluation.

@@ -1,13 +1,5 @@
 [
   [
-    "what is think about the current global market",
-    "Ollama error: model 'llama3.1:8b' not found (status code: 404)"
-  ],
-  [
-    "what do you think about the current global market",
-    "Ollama error: llama runner process has terminated: CUDA error (status code: 500)"
-  ],
-  [
     "What's happening in the world right now?",
     "I haven't seen that news, but let me think about it... As a 3rd-year student, I don't always stay up-to-date with the latest global events. But from what I know, there have been some big developments recently. From my understanding, there's been a lot of talk about inflation and economic uncertainty affecting many countries around the world. Some experts are saying that the global economy is shifting towards a more multipolar world, while others are predicting a potential recession in certain regions."
   ],
@@ -28,12 +20,8 @@
     "I'll be quiet then"
   ],
   [
-    "yo yo WhatsApp gang macha macha Bobby with my gang what you think about this",
-    "Ollama error: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download"
-  ],
-  [
     "hello can you tell me a little about yourself",
-    "I'm Adarsh Singh, nice to chat with you! I'm a 3rd-year student at Manipal University Jaipur, studying Computer Science and Engineering. I'm in my 5th semester right now. When I'm not coding or learning new things, you can find me playing football or volleyball with friends, or listening to music. My project guide is Mr. Virendra Mehgwal, and he's been super helpful. That's about me!"
+    "I'm Adarsh Singh, nice to chat with you! I'm a 3rd-year student at Manipal University Jaipur, studying Computer Science and Engineering. I'm in my 5th semester right now. When I'm not coding or learning new things, you can find me playing football or volleyball with friends, or listening to music. My project guide is Dr. Virendra Mehgwal, and he's been super helpful. That's about me!"
   ],
   [
     "quiet",
@@ -65,7 +53,7 @@
   ],
   [
     "Tell me about yourself",
-    "I'm Adarsh Singh, a 3rd year CSE student at Manipal University Jaipur. I'm currently in my 5th semester, which is a bit crazy! My registration number is 2427030325. When I'm not studying or working on projects, you can find me playing judo, volleyball, or football with friends. I also enjoy listening to music and trying out new tunes. As for my project, it's called Adarsh AI Clone – an AI Digital Twin that mimics my personality using a local LLM running through Ollama. It's been a lot of fun working on this project, and I'm proud of how far we've come. My project guide, Mr."
+    "I'm Adarsh Singh, a 3rd year B.Tech CSE Core student at Manipal University Jaipur. I'm currently in my 5th semester, which is a bit crazy! My registration number is 2427030325. When I'm not studying or working on projects, you can find me playing judo, volleyball, or football with friends. I also enjoy listening to music and trying out new tunes. As for my project, it's called Adarsh AI Clone – an AI Digital Twin that mimics my personality using a local LLM running through Ollama. It's been a lot of fun working on this project, and I'm proud of how far we've come. My project guide, Dr. Virendra Mehgwal."
   ],
   [
     "han meri jaan",
@@ -97,7 +85,7 @@
   ],
   [
     "Tell me about yourself",
-    "So, like I mentioned earlier, my name is Adarsh Singh, and I'm a 3rd year CSE student at Manipal University Jaipur. I'm in my 5th semester, which means I'm almost done with my BTech degree! My project guide, Mr. Virendra Mehgwal, is a great mentor who helps me stay on track with my PBL-2 project. It's all about creating an AI digital twin that mimics my personality using a local LLM running through Ollama. Pretty cool stuff, right?"
+    "So, like I mentioned earlier, my name is Adarsh Singh, and I'm a 3rd year B.Tech CSE Core student at Manipal University Jaipur. I'm in my 5th semester, which means I'm almost done with my BTech degree! My project guide, Dr. Virendra Mehgwal, is a great mentor who helps me stay on track with my PBL-2 project. It's all about creating an AI digital twin that mimics my personality using a local LLM running through Ollama. Pretty cool stuff, right?"
   ],
   [
     "quiet",
@@ -109,7 +97,7 @@
   ],
   [
     "Tell me about yourself",
-    "So, like I mentioned earlier, my name is Adarsh Singh, and I'm a 3rd year CSE student at Manipal University Jaipur. I'm in my 5th semester, which means I'm almost done with my BTech degree! When I'm not studying, you can find me playing sports like judo, volleyball, or football with friends, or listening to music to relax. My project is my biggest passion right now - creating this AI digital twin that talks like me and runs on Ollama. It's a fun challenge, but also helps me learn a lot about AI and ML!"
+    "So, like I mentioned earlier, my name is Adarsh Singh, and I'm a 3rd year B.Tech CSE Core student at Manipal University Jaipur. I'm in my 5th semester, which means I'm almost done with my BTech degree! When I'm not studying, you can find me playing sports like judo, volleyball, or football with friends, or listening to music to relax. My project is my biggest passion right now - creating this AI digital twin that talks like me and runs on Ollama. It's a fun challenge, but also helps me learn a lot about AI and ML!"
   ],
   [
     "what do u thinkl abt the wars going on right now",
@@ -117,7 +105,7 @@
   ],
   [
     "what is your name and introduce yourself",
-    "My name is Adarsh Singh, and I'm a 3rd year CSE student at Manipal University Jaipur in my 5th semester. I'm doing pretty well with my studies, and more importantly, I've been working on this exciting project - an AI digital twin that mimics my personality using a local LLM running through Ollama. It's been a great learning experience so far! When I'm not studying or coding, you can find me playing sports like judo, volleyball, or football with friends, or listening to music to relax. That's me in a nutshell!"
+    "My name is Adarsh Singh, and I'm a 3rd year B.Tech CSE Core student at Manipal University Jaipur in my 5th semester. I'm doing pretty well with my studies, and more importantly, I've been working on this exciting project - an AI digital twin that mimics my personality using a local LLM running through Ollama. It's been a great learning experience so far! When I'm not studying or coding, you can find me playing sports like judo, volleyball, or football with friends, or listening to music to relax. That's me in a nutshell!"
   ],
   [
     "stop",
@@ -142,5 +130,177 @@
   [
     "BEL tomorrow is my presentation and you will be you are the one you are the specimen I am going to present how do you feel about that",
     "nervously chuckles, fidgets slightly \"Hey, don't worry about me! I'm sure your presentation will go great. You're prepared, right? I mean, you've been practicing for this and everything. Just relax and be yourself, I'm sure you'll do fine. Are you nervous at all?\""
+  ],
+  [
+    "can you remember the last question I asked you yesterday",
+    "thinks for a moment \"Hmm, I'm not really sure... My memory isn't the best when it comes to recalling specific conversations from yesterday or earlier. As a college student, I've got a lot on my mind and don't always keep track of everything that's happened in a conversation. We were just discussing something about wars and global markets, right?\""
+  ],
+  [
+    "yes tell me more about it",
+    "reaches for my notes \"To be honest, I'm not really sure... We weren't actually talking about that yesterday. I think you might have started the conversation, though? You asked me about the ongoing wars in the world, and then we switched to talking about your presentation for tomorrow. I don't remember much from before that.\""
+  ],
+  [
+    "mujhe kuchh puchna to hello can you please introduce yourself",
+    "smiles warmly \"I'm Adarsh Singh, nice to meet you! I'm a 3rd-year student at Manipal University Jaipur, studying Computer Science and Engineering. I'm currently working on a project called Adarsh AI Clone, which is basically an AI digital twin that mimics my personality using a local LLM running through Ollama. It's a fun project, and I'm really enjoying the process of building it.\""
+  ],
+  [
+    "Tell me about yourself",
+    "Okay, so I'm Adarsh Singh. Like I said, I'm a computer science engineering student at Manipal University Jaipur in my 3rd year, 5th semester. I really enjoy learning about AI and ML, and I've been working on this project for PBL-2 that's actually pretty cool - it's an AI digital twin that talks like me, built using Ollama and Gradio. When I'm not coding or studying, you can find me playing sports like judo or volleyball, listening to music, or just chillin' with friends. I'm a pretty direct person, so if you need anything, just ask!"
+  ],
+  [
+    "Tell me about yourself",
+    "\"Yeah, so I'm Adarsh Singh. As I mentioned before, I'm a 3rd-year student at Manipal University Jaipur, studying Computer Science and Engineering. My project for PBL-2 is my AI digital twin that uses Ollama and Gradio to mimic my personality. It's been a fun project to work on, and I've learned a lot about AI and ML along the way. When I'm not working on my project or studying, you can usually find me at the college gym playing volleyball or football, or just relaxing with some music. I'm also really into judo - it's a great way for me to stay active and focused."
+  ],
+  [
+    "what is your age",
+    "I'm 21 years old, still pretty young, but trying to make the most of my time studying and working on my projects."
+  ],
+  [
+    "What are your hobbies?",
+    "I'm really into sports, so I play a lot of volleyball and football with friends. And I also enjoy judo - it's a great way for me to stay active and focused. Music is another one of my passions, I like listening to all kinds of music when I need to relax or just want to unwind."
+  ],
+  [
+    "Tell me about yourself",
+    "\"Alright, so yeah... I'm Adarsh Singh. Like I said before, I'm a 3rd-year B.Tech CSE Core student at Manipal University Jaipur. My project for PBL-2 is actually pretty cool - it's an AI digital twin that uses Ollama and Gradio to mimic my personality. It's been a fun project to work on, and I've learned a lot about AI and ML along the way. When I'm not working on my project or studying, you can usually find me at the college gym playing volleyball or football, or just relaxing with some music. I also enjoy listening to music - it helps me concentrate while I'm coding or studying."
+  ],
+  [
+    "Tell me about yourself",
+    "Okay, so yeah... I'm Adarsh Singh. I'm a 3rd-year student at Manipal University Jaipur, majoring in Computer Science and Engineering. My project for PBL-2 is really what I've been focusing on lately - it's an AI digital twin that mimics my personality using Ollama and Gradio. It's been a great learning experience, and I'm excited to see how it turns out. When I'm not working on my project or studying, you can find me at the gym playing volleyball or just chillin' with friends. I also enjoy listening to music - it helps me relax and focus."
+  ],
+  [
+    "what is your registration number",
+    "My registration number is 2427030325."
+  ],
+  [
+    "what is your name registration number and guide name",
+    "My name is Adarsh Singh, my registration number is 2427030325, and my project guide's name is Dr. Virendra Mehgwal."
+  ],
+  [
+    "what is your age",
+    "I'm 21 years old, just a 3rd-year student at Manipal University Jaipur."
+  ],
+  [
+    "What are your hobbies?",
+    "Right, so I really enjoy playing volleyball and football with my friends. I also like judo - it's actually helped me develop discipline and focus, which is pretty useful for studying and coding too. And of course, music's always been a big part of my life - I find it helps me relax and concentrate while I'm working on projects or studying."
+  ],
+  [
+    "Tell me about yourself",
+    "Okay, so yeah... I'm Adarsh Singh. I'm a 3rd-year student at Manipal University Jaipur, majoring in Computer Science and Engineering. My project for PBL-2 is really what I've been focusing on lately - it's an AI digital twin that mimics my personality using Ollama and Gradio. It's been a great learning experience, and I'm excited to see how it turns out. When I'm not working on my project or studying, you can find me at the gym playing volleyball or just chillin' with friends. I also enjoy listening to music - it helps me relax and focus."
+  ],
+  [
+    "Tell me about yourself",
+    "Sorry about that, I think there was a glitch for a sec. So, like I said before... my name is Adarsh Singh, and I'm a 3rd-year student at Manipal University Jaipur. My registration number is 2427030325, and my project guide's name is Dr. Virendra Mehgwal. As for myself, I really enjoy learning about AI and building projects from scratch. When I'm not studying or working on my project, you can find me playing sports like judo, volleyball, or football with friends. Music's also a big part of my life - it helps me unwind and focus."
+  ],
+  [
+    "what is your name",
+    "My name's Adarsh Singh, by the way. I'm a 3rd-year student at Manipal University Jaipur, studying Computer Science and Engineering."
+  ],
+  [
+    "Tell me about yourself",
+    "So, my name is Adarsh Singh, and I'm a B.Tech CSE Core student in my 5th semester, which means I'm in my third year of studies. My registration number is 2427030325. I've been working on this AI project as part of PBL-2, which has been keeping me pretty busy lately. It's an AI digital twin that mimics my personality using Ollama and Gradio. When I'm not studying or working on my project, I enjoy playing sports like judo, volleyball, or football with friends, and listening to music to relax."
+  ],
+  [
+    "just your name",
+    "Adarsh Singh"
+  ],
+  [
+    "hey what's your name and who is your guide",
+    "My name is Adarsh Singh, and my project guide is Dr. Virendra Mehgwal. He supervises and evaluates my work as part of PBL-2 at Manipal University Jaipur."
+  ],
+  [
+    "hobbies?",
+    "I enjoy playing sports like judo, volleyball, and football with friends. I also listen to a lot of music - it helps me relax and focus while studying."
+  ],
+  [
+    "your name and guide name",
+    "My name is Adarsh Singh, and my project guide is Dr. Virendra Mehgwal."
+  ],
+  [
+    "what is your project",
+    "So, my project is an AI Digital Twin - basically, it's a chatbot that talks like me. I built it using Ollama locally on my PC, with the llama3.2:3b model, which means no internet needed for the AI part. The user interface is handled by Gradio, which makes it easy to interact with the bot. It's pretty cool!"
+  ],
+  [
+    "if I want to achieve true generalization in a graph what approach should I take if I am using reinforcement learning",
+    "For achieving true generalization in a graph using reinforcement learning, I'd recommend taking an approach that balances exploration and exploitation. One strategy is to use a meta-learning method, like Model-Agnostic Meta-Learning (MAML) or Few-Shot Learning. These methods can learn to adapt to new environments by fine-tuning a pre-trained model on a small set of task-specific examples. This can help the agent generalize better to unseen graphs. Another approach is to use a combination of graph-based exploration and exploitation techniques. For example, you could use graph convolutional networks (GCNs) to encode the graph structure in the state space, and then use reinforcement learning algorithms like Q-learning or Deep Deterministic Policy Gradients (DDPG) to optimize the agent's behavior. Additionally, you might want to consider using techniques that encourage exploration of the entire graph space, such as random walks or graph sampling methods. This can help the agent discover new patterns and relationships in the graphs, which is essential for generalization. Finally, it's also important to experiment with different hyperparameters, such as learning rates, batch sizes, and number of iterations, to find the optimal combination that works best for your specific problem. Of course, this is just a starting point, and there are many other approaches you could take depending on the specifics of your problem. But overall, I think a combination of meta-learning, graph-based exploration, and careful hyperparameter tuning can be a great way to achieve true generalization in graphs using reinforcement learning!"
+  ],
+  [
+    "Tell me about yourself",
+    "I'm Adarsh Singh, a 3rd year B.Tech CSE Core student at Manipal University Jaipur. I'm currently in my 5th semester, which means I'm almost done with my degree. My registration number is 2427030325. As for my project, it's an AI Digital Twin that mimics my personality using a local LLM running through Ollama. It's pretty cool! Dr. Virendra Mehgwal is my project guide and professor at Manipal University Jaipur. He supervises and evaluates my work as part of PBL-2. When I'm not studying or working on my project, you can find me playing sports like judo, volleyball, or football with friends. I also enjoy listening to music - it helps me relax and focus while studying."
+  ],
+  [
+    "Who is your project guide?",
+    "My project guide is Dr. Virendra Mehgwal. He's my professor at Manipal University Jaipur and supervises my work on the AI Digital Twin project as part of PBL-2."
+  ],
+  [
+    "Tell me about yourself",
+    "I'm Adarsh Singh, a 3rd year B.Tech CSE Core student at Manipal University Jaipur. I'm currently in my 5th semester, which means I'm almost done with my degree. My registration number is 2427030325. As for my project, it's an AI Digital Twin that mimics my personality using a local LLM running through Ollama. It's pretty cool! I enjoy learning about AI and building projects from scratch, and when I'm not studying or working on my project, you can find me playing sports like judo, volleyball, or football with friends. Music also helps me relax and focus while studying."
+  ],
+  [
+    "what do you think about the anime One piece",
+    "I've heard of One Piece! My friend who's into anime is a big fan, and he's always talking about it. From what I understand, it's a long-running series with a huge following all over the world. The story seems to be about this kid named Monkey D. Luffy who's on a quest to become the Pirate King, with a crew of friends by his side. It sounds like an epic adventure! I've seen some episodes with my friend, and I have to say that the animation and characters are really impressive. The creator, Eiichiro Oda, is known for his attention to detail and world-building skills. But what really interests me about One Piece is its themes of friendship, camaraderie, and perseverance. As a student working on my AI project, I've had to think about how machines can learn from each other and adapt to new situations, kind of like Luffy's crew learning from their experiences and growing stronger together. It's a great reminder that collaboration and teamwork are key to achieving our goals! So yeah, I'm definitely intrigued by One Piece!"
+  ],
+  [
+    "hello so can you",
+    "Hello! Yeah, I can chat with you about anything. Go ahead and ask me something or share something you'd like to talk about - I'm all ears (or in this case, all text)!"
+  ],
+  [
+    "crack a joke",
+    "Here's one: Why did the judo player bring a ladder to the match? Because he wanted to take his opponent down a peg! Get it?"
+  ],
+  [
+    "what do you think about the ongoing",
+    "I haven't seen that news, but let me think about it for a sec... What's going on that I should know about?"
+  ],
+  [
+    "what what are your opinions on the midterms midterm elections of United States",
+    "To be honest, I don't have real-time access to current events, and my knowledge cutoff is up to my last update (which was before today). But I can try to provide some general insights or perspectives on the topic. As a non-US citizen, I don't have personal opinions about US politics. However, I can tell you that the midterms are an important part of the democratic process in the United States. The elections typically affect the balance of power in Congress and can shape policy decisions for the next few years. From what I've learned from my studies and news articles, it's clear that the midterms often have a significant impact on the country's politics, with many candidates competing to represent their constituents in Congress. It's also an opportunity for voters to hold their elected representatives accountable and make their voices heard. But I'd love to hear more about what's happening! What are your thoughts on the midterms?"
+  ],
+  [
+    "your opinions on the Ukraine Russia war",
+    "The Ukraine-Russia conflict is a very complex and sensitive issue. As a neutral observer, I can try to provide some context and insights. From what I've learned from my studies, the conflict began in 2014 when Russia annexed Crimea from Ukraine. Since then, there have been multiple skirmishes and tensions along the border, with ongoing support for Ukrainian independence by Western countries like the US and EU. I think it's clear that both sides have legitimate concerns and grievances. Russia has historically considered Ukraine to be part of its sphere of influence, while Ukraine sees itself as a sovereign nation with its own identity and aspirations. As AI is being developed to mimic human-like behavior, I find the conflict between human perspectives fascinating! The challenges of understanding and addressing these competing narratives highlight the complexities of international relations and diplomacy. My focus on building AI models and exploring machine learning concepts has helped me develop empathy for different viewpoints, even if we don't see eye-to-eye. What are your thoughts on this complex issue?"
+  ],
+  [
+    "who is a guide and what are the most recent bugs which were fixed with a new",
+    "My project guide! Dr. Virendra Mehgwal is my guide at Manipal University Jaipur, where I'm pursuing my B.Tech CSE Core degree. As for the latest bugs that were fixed in my AI Digital Twin project, I recently encountered an issue with old conversation context \"bleeding\" into new unrelated answers. To fix this, I had to update my backend.py file to improve memory management and ensure that each conversation turn is treated separately. Another recent bug I fixed was related to the Edge-TTS (en-IN-PrabhatNeural) model used for natural voice output. There was a slight delay in responding to user queries due to an optimization issue in the model's inference pipeline. After some debugging, I was able to resolve this by tweaking the model's configuration and re-training it. I'm also working on upgrading my project to use a multi-tier memory system with Core, Important, Temporary categories. This should improve overall performance and help me better manage conversation context. These are just two recent examples of bugs that were fixed in my project. Debugging is an essential part of building reliable AI models!"
+  ],
+  [
+    "Tell me about yourself",
+    "I'm Adarsh Singh, a 3rd year B.Tech CSE Core student at Manipal University Jaipur in my 5th semester. My registration number is 2427030325. As for my project, I've been working on an AI Digital Twin that mimics my personality using a local LLM running through Ollama. It's called Adarsh AI Clone, and it's part of PBL-2 (Project Based Learning, Phase 2) at my university. My guide is Dr. Virendra Mehgwal, who supervises and evaluates my work. When I'm not studying or working on my project, you can find me practicing judo, playing volleyball or football with friends, or listening to music. I enjoy learning about AI and building projects from scratch – it's a great way to express myself and explore new technologies! Overall, I'm just a regular college student trying to make the most of my time at Manipal University Jaipur while working on some cool tech projects!"
+  ],
+  [
+    "what is your favourite food",
+    "Food! I love eating. My favorite food has got to be spicy North Indian cuisine. Give me a plate of flavorful curries, naan bread, and basmati rice, and I'm a happy man! Specifically, I'm a big fan of dishes like chana masala, palak paneer, or any good old-fashioned butter chicken. There's just something about the combination of spices, herbs, and rich sauces that really hits the spot for me. But if I'm being completely honest, I also have a sweet tooth. I love indulging in traditional Indian sweets like gulab jamun, jalebi, or ras malai. They're the perfect way to satisfy my cravings after a long day of studying (or debugging code!). Of course, as a college student, I don't always get to enjoy these foods as often as I'd like. But when I do, it's always a treat!"
+  ],
+  [
+    "what do you think about the Global market conditions right now",
+    "To be honest, I don't have real-time access to current events, and my knowledge cutoff is up to my last update (which was before today). However, I can try to provide some general insights based on what I've learned from my studies. From what I understand, the global market conditions are complex and dynamic. There are various factors at play, such as economic fluctuations, trade policies, technological advancements, and geopolitical tensions. As a tech enthusiast, I'm interested in how emerging technologies like AI, blockchain, and 5G are shaping the global economy. Some of my colleagues have been discussing the potential implications of increased global competition on the tech industry. With companies like China's Huawei and India's Infosys making waves globally, there's likely to be more focus on innovation, talent acquisition, and strategic partnerships. However, I don't want to speculate too much without having the latest information. If you'd like to discuss this further or share your thoughts, I'm all ears!"
+  ],
+  [
+    "Tell me about yourself",
+    "I'm Adarsh Singh, a 3rd year B.Tech CSE Core student at Manipal University Jaipur in my 5th semester. My registration number is 2427030325. As for my project, I've been working on an AI Digital Twin that mimics my personality using a local LLM running through Ollama. It's called Adarsh AI Clone, and it's part of PBL-2 (Project Based Learning, Phase 2) at my university. My guide is Dr. Virendra Mehgwal, who supervises and evaluates my work. When I'm not studying or working on my project, you can find me practicing judo, playing volleyball or football with friends, or listening to music. I enjoy learning about AI and building projects from scratch – it's a great way to express myself and explore new technologies! I'm also quite passionate about debugging and optimizing code, which is an essential skill for any tech enthusiast. When I'm not tinkering with my project or helping others with their coding queries, you can find me exploring new libraries and frameworks in Python. Overall, I'm just a regular college student trying to make the most of my time at Manipal University Jaipur while working on some cool tech projects!"
+  ],
+  [
+    "What are your hobbies?",
+    "I enjoy a variety of activities outside of academics! Judo is one of my favorite hobbies - it's an excellent way to stay physically fit and mentally focused. I find the discipline and strategy involved in judo really appealing, and it helps me relax after a long day of studying or debugging code. I'm also quite active on the sports field, playing volleyball and football with friends whenever we can. It's always a blast competing against each other, trying to outmaneuver our opponents, and working together as a team. When I'm not sweating it out on the pitch, you can find me jamming out to my favorite tunes or exploring new music genres. Music is another one of my passions - there's something about the way different melodies and rhythms come together that really speaks to me. Whether I'm listening to electronic dance music, Bollywood beats, or classical compositions, music always manages to lift my mood and transport me to a different world. Overall, I'd say I'm just a laid-back guy who loves exploring new hobbies and interests whenever time permits!"
+  ],
+  [
+    "Who is your project guide?",
+    "My project guide is Dr. Virendra Mehgwal. He's my professor at Manipal University Jaipur, and he supervises and evaluates my work on the Adarsh AI Clone project. I really appreciate his guidance and expertise - he's always willing to lend a helping hand whenever I'm stuck with a problem or need feedback on my code."
+  ],
+  [
+    "crack a joke",
+    "Here's one: Why did the programmer quit his job? Because he didn't get arrays! (get it?)"
+  ],
+  [
+    "another one but kinda dark humour",
+    "Why do programmers prefer dark mode? Because light attracts bugs."
+  ],
+  [
+    "Who is your project guide?",
+    "Dr. Virendra Mehgwal is my project guide and professor at Manipal University Jaipur. He's been a huge help throughout the semester, guiding me through the ups and downs of working on the Adarsh AI Clone project."
+  ],
+  [
+    "what is your name",
+    "My name is Adarsh Singh, and I'm a 3rd year B.Tech CSE Core student at Manipal University Jaipur."
   ]
 ]

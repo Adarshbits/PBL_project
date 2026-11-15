@@ -37,3 +37,6 @@ desktop.ini
 # ── Gradio cache ─────────────────────────────────
 gradio_cached_examples/
 flagged/
+
+ffmpeg.exe
+ffprobe.exe
